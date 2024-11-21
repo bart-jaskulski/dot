@@ -1,15 +1,7 @@
 return {
   {
-    'Exafunction/codeium.vim',
-    event = "InsertEnter",
-    cmd = "Codeium",
-    build = ":Codeium Auth",
-    init = function()
-      vim.g.codeium_no_map_tab = true
-    end
-  },
-  {
     'ms-jpq/coq_nvim',
+    -- enabled = false,
     event = "InsertEnter",
     branch = 'coq',
     build = ':COQdeps',
@@ -22,14 +14,14 @@ return {
         },
         clients = {
           lsp = { enabled = true },
-          tree_sitter = { enabled = true },
-          tags = { enabled = true },
+          tree_sitter = { enabled = false },
+          tags = { enabled = false },
           buffers = { enabled = false },
           tmux = { enabled = false },
           snippets = { enabled = false },
           registers = { enabled = false },
         }
       }
-    end
-  },
+    end,
+  }
 }

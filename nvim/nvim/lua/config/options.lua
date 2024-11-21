@@ -1,48 +1,44 @@
 vim.g.mapleader = ' '
 
--- Count line numbers from current row
-vim.opt.number = true
-vim.opt.relativenumber = true
-
--- Display any signs over numbers
-vim.opt.signcolumn = "yes"
-
--- Show command and insert mode
-vim.opt.showmode = true
-
-vim.opt.history = 10000
-
-vim.opt.sessionoptions:remove { 'blank', 'buffers', 'folds', 'help', 'terminal' }
-
--- Use some unified indentation rules
+-- set nobackup
+-- set noswapfile
+-- set nowritebackup
+-- vim.opt.directory='~/.vimswap'
 vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.smarttab = true
+vim.opt.autoread = true -- automatically read a file if changed outside
+vim.opt.autowrite = true -- automatically write files when changing when multiple files open
+vim.opt.clipboard='unnamed'
+vim.opt.cmdheight = 1
+vim.opt.colorcolumn='80'
+vim.opt.complete:remove { 't' ,'i' }
+vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect', 'fuzzy' }
+vim.opt.cursorline = true
+vim.opt.display='lastline'
 vim.opt.expandtab = true
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
--- mostly used with >> and <<
-vim.opt.shiftwidth = 2
-
--- If folds are enabled, leave some of them closed
+vim.opt.fixendofline = false -- stop vim from silently messing with files that it shouldn't
+vim.opt.foldexpr='nvim_treesitter#foldexpr()'
 vim.opt.foldlevel=999
 vim.opt.foldmethod='expr'
-vim.opt.foldnestmax=2
 vim.opt.foldminlines=5
-vim.opt.foldexpr='nvim_treesitter#foldexpr()'
-
--- stop vim from silently messing with files that it shouldn't
-vim.opt.fixendofline = false
-
--- set nobackup
--- set nowritebackup
--- set noswapfile
--- vim.opt.directory='~/.vimswap'
-
-vim.opt.textwidth=100
+vim.opt.foldnestmax=2
 vim.opt.formatoptions='cq1lmMjp'
-
--- Avoid hit enter to continue
+vim.opt.hidden = true -- stop complaints about switching buffer with changes
+vim.opt.history = 10000
+vim.opt.hlsearch = true
+vim.opt.ignorecase = true
+vim.opt.incsearch = true
+vim.opt.laststatus = 2 -- Display status line only for the last window
+vim.opt.lazyredraw = true -- don't redraw while executing macros
+vim.opt.linebreak = true
+vim.opt.mouse='a'
+vim.opt.number = true
+vim.opt.path:prepend { 'src/**', 'assets/**' }
+vim.opt.pumblend=10
+vim.opt.pumheight=10
+vim.opt.relativenumber = true
+vim.opt.scrolloff=8
+vim.opt.sessionoptions:remove { 'blank', 'buffers', 'folds', 'help', 'terminal' }
+vim.opt.shiftwidth = 2
 vim.opt.shortmess = {
   a = true, -- use abbreviation
   o = true, -- use abbreviation
@@ -54,74 +50,36 @@ vim.opt.shortmess = {
   W = true, -- don't care about written
   F = true, -- don't care file info
 }
-
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
-vim.opt.linebreak = true
-vim.opt.ignorecase = true
+vim.opt.showmode = true -- Show command and insert mode
+vim.opt.showtabline = 1 -- Show tab line only if there are 2+ tabs
+vim.opt.sidescrolloff=3
+vim.opt.signcolumn = "yes" -- Display any signs over numbers
 vim.opt.smartcase = true
--- wrap around when searching
-vim.opt.wrapscan = true
-
--- stop complaints about switching buffer with changes
-vim.opt.hidden = true
-
--- faster scrolling
-vim.opt.ttyfast = true
-
--- don't redraw while executing macros
-vim.opt.lazyredraw = true
-
--- better command-line completion
-vim.opt.wildmenu = true
-
-vim.opt.scrolloff=8
-vim.opt.clipboard='unnamed'
-vim.opt.cursorline = true
-
+vim.opt.smartindent = true
+vim.opt.smarttab = true
+vim.opt.softtabstop = 2
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-
-vim.opt.colorcolumn='80'
+vim.opt.tabstop = 2
+vim.opt.textwidth=100
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen=100
-
--- automatically read a file if changed outside
-vim.opt.autoread = true
--- automatically write files when changing when multiple files open
-vim.opt.autowrite = true
-
-vim.opt.mouse='a'
-
-vim.opt.display='lastline'
-vim.opt.sidescrolloff=3
-
-vim.opt.complete:remove { 't' ,'i' }
-vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
+vim.opt.ttyfast = true -- faster scrolling
+vim.opt.updatetime = 200 -- Save swap file and trigger CursorHold
+vim.opt.wildmenu = true -- better command-line completion
 vim.opt.wildmode='longest:full'
-
--- Show tab line only if there are 2+ tabs
-vim.opt.showtabline = 1
-
-vim.opt.path:prepend { 'src/**', 'assets/**' }
-
--- Display status line only for the last window
-vim.opt.laststatus = 2
-vim.opt.cmdheight = 1
+vim.opt.winblend=10
+vim.opt.wrapscan = true -- wrap around when searching
 
 if os.getenv('DISPLAY') ~= nil then
   vim.opt.termguicolors = true
   vim.opt.background = 'light'
-  -- display hidden chars only in TTY
   -- better ascii friendly listchars
   vim.opt.listchars = {
     lead = '*', trail = '*', tab = '|>',
     extends = '…', precedes = '…', nbsp = '␣'
   }
-  vim.opt.list = true
-  vim.opt.pumblend=10
-  vim.opt.pumheight=10
-  vim.opt.winblend=10
+  vim.opt.list = true -- display hidden chars only in TTY
 else
   vim.opt.background = 'dark'
   vim.opt.cursorline = false

@@ -18,10 +18,3 @@ iabbrev thr throw new
 iabbrev __c public function __construct(
 
 iabbrev dst declare(strict_types=1);
-
-" au FileType php {
-"   set formatprg=phpcbf\ --stdin-path=%\ -
-" # set makeprg=XDEBUG_MODE=off\ phpstan\ analyse\ src\ --no-progress\ --error-format=raw\ --no-interaction\ &&\ phpcs\ -q\ --report=emacs
-" }
-
-" au BufWritePost *.php silent! !eval '[ -f ".git/hooks/ctags" ] && .git/hooks/ctags &'

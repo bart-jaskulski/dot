@@ -1,16 +1,18 @@
 return {
   {
     'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,
     priority = 1000,
-    config = function()
-      require 'github-theme'.setup {
+    opts = {
         options = {
-          ["styles.comments"] = 'italic',
+          -- ["styles.comments"] = 'italic',
           transparent = true,
           dim_inactive = true
         }
-      }
+    },
+    init = function()
       vim.cmd('colorscheme github_light')
-    end,
+    end
   },
 }

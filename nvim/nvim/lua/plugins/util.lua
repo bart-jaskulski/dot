@@ -42,6 +42,7 @@ return {
       )
 
       local autowrite = function()
+        if vim.bo.buftype == 'nofile' or vim.bo.buftype == 'prompt' or vim.bo.filetype == '' then return end
         if vim.v.this_session ~= '' and vim.fn.getcwd():match('Repos') then MiniSessions.write(nil, { force = true }) end
       end
       vim.api.nvim_create_autocmd(
@@ -53,7 +54,7 @@ return {
   },
   {
     'echasnovski/mini.hipatterns',
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    event = "VeryLazy",
     opts = function()
       local hi = require("mini.hipatterns")
       return {

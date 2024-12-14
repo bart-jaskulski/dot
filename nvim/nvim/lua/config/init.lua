@@ -30,7 +30,6 @@ vim.api.nvim_create_autocmd("User", {
     end
     require("config.keymaps")
 
-    vim.api.nvim_set_hl(0, 'SpellBad', {default=true,fg='#d1242f', underline=true})
   end,
 })
 

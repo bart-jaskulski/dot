@@ -7,7 +7,8 @@ return {
       },
     },
     opts = function()
-      local php_dap = require 'mason-registry'.get_package('php-debug-adapter'):get_install_path() .. '/extension/out/phpDebug.js'
+      local php_dap = require 'mason-registry'.get_package('php-debug-adapter'):get_install_path() ..
+      '/extension/out/phpDebug.js'
       return {
         adapters = {
           php = {
@@ -73,26 +74,17 @@ return {
                 "/home/bjaskulski/Plugins/woocommerce-gateway-stripe",
                 ['/var/www/html/wp-content/plugins/wp-desk-omnibus'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/wp-desk-omnibus",
-                ['/var/www/html/wp-content/plugins/flexible-refund-and-return-order-for-woocommerce'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-refund-and-return-order-for-woocommerce",
-                ['/var/www/html/wp-content/plugins/shopmagic-for-twilio'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-for-twilio-wp-init",
-                ['/var/www/html/wp-content/plugins/shopmagic-for-google-sheets'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-for-google-sheets",
-                ['/var/www/html/wp-content/plugins/flexible-wishlist'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-wishlist",
-                ['/var/www/html/wp-content/plugins/woocommerce-gateway-payu-pl'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-payu-pl",
-                ['/var/www/html/wp-content/plugins/woocommerce-wfirma'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-wfirma",
-                ['/var/www/html/wp-content/plugins/flexible-checkout-fields'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-checkout-fields",
-                ['/var/www/html/wp-content/plugins/paczka'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-paczka-w-ruchu",
-                ['/var/www/html/wp-content/plugins/flexible-invoices-woocommerce'] =
-                "/home/bjaskulski/Repos/full-gitlab/wpdesk/heroes/flexible-invoices-woocommerce",
-                ['/var/www/html/wp-content/plugins/woocommerce-gateway-przelewy24'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-przelewy24",
+                ['/var/www/html/wp-content/plugins/flexible-refund-and-return-order-for-woocommerce'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-refund-and-return-order-for-woocommerce",
+                ['/var/www/html/wp-content/plugins/shopmagic-for-twilio'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-for-twilio-wp-init",
+                ['/var/www/html/wp-content/plugins/shopmagic-for-google-sheets'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-for-google-sheets",
+                ['/var/www/html/wp-content/plugins/flexible-wishlist'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-wishlist",
+                ['/var/www/html/wp-content/plugins/woocommerce-gateway-payu-pl'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-payu-pl",
+                ['/var/www/html/wp-content/plugins/woocommerce-wfirma'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-wfirma",
+                ['/var/www/html/wp-content/plugins/flexible-checkout-fields'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-checkout-fields",
+                ['/var/www/html/wp-content/plugins/paczka'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-paczka-w-ruchu",
+                ['/var/www/html/wp-content/plugins/flexible-invoices-woocommerce'] = "/home/bjaskulski/Repos/full-gitlab/wpdesk/heroes/flexible-invoices-woocommerce",
+                ['/var/www/html/wp-content/plugins/woocommerce-gateway-przelewy24'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-przelewy24",
+                ['/var/www/html/wp-content/plugins/woocommerce-flexible-pricing'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-flexible-pricing",
               },
               stopOnEntry = false,
               log = false

@@ -144,7 +144,6 @@ return {
       -- LazyVim.lsp.setup()
       -- LazyVim.lsp.on_dynamic_capability(require("lazyvim.plugins.lsp.keymaps").on_attach)
 
-      -- if vim.fn.has("nvim-0.10") == 1 then
       --   -- inlay hints
       --   if opts.inlay_hints.enabled then
       --     LazyVim.lsp.on_supports_method("textDocument/inlayHint", function(client, buffer)
@@ -157,18 +156,6 @@ return {
       --       end
       --     end)
       --   end
-      --
-      --   -- code lens
-      --   if opts.codelens.enabled and vim.lsp.codelens then
-      --     LazyVim.lsp.on_supports_method("textDocument/codeLens", function(client, buffer)
-      --       vim.lsp.codelens.refresh()
-      --       vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-      --         buffer = buffer,
-      --         callback = vim.lsp.codelens.refresh,
-      --       })
-      --     end)
-      --   end
-      -- end
 
       vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 

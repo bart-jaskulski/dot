@@ -40,4 +40,44 @@ return {
       }
     },
   },
+  {
+    "echasnovski/mini.indentscope",
+    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    opts = function()
+      return {
+        draw = {
+          animation = require("mini.indentscope").gen_animation.none(),
+        },
+        -- symbol = "│",
+        options = { try_as_border = true },
+      }
+    end,
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        callback = function()
+          vim.cmd([[hi MiniIndentscopeSymbol guifg=#CCCDCD]])
+        end,
+      })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = {
+          "Trouble",
+          "alpha",
+          "dashboard",
+          "help",
+          "lazy",
+          "mason",
+          "neo-tree",
+          "notify",
+          "snacks_notif",
+          "snacks_terminal",
+          "snacks_win",
+          "toggleterm",
+          "trouble",
+        },
+        callback = function()
+          vim.b.miniindentscope_disable = true
+        end,
+      })
+    end,
+  },
 }

@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("wrap_spell"),
-  pattern = { "gitcommit", "markdown", "text" },
+  pattern = { "gitcommit", "plaintext", "markdown", "text" },
   callback = function(ev)
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
@@ -74,4 +74,13 @@ end
 -- some tweaks for terminal mode
 vim.api.nvim_create_autocmd("TermOpen", {
   command = "startinsert | setlocal nonumber norelativenumber nocursorline signcolumn=no",
+})
+
+-- This doesn't work. Maybe too early?
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = augroup("colors"),
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, 'SpellBad', {default=true,fg='#da1242', underline=true})
+  end,
 })

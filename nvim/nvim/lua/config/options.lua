@@ -58,6 +58,7 @@ vim.opt.smartcase = true
 vim.opt.smartindent = true
 vim.opt.smarttab = true
 vim.opt.softtabstop = 2
+-- vim.opt.spell = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.tabstop = 2
@@ -89,6 +90,8 @@ end
 if vim.fn.executable('rg') == 1 then
   vim.opt.grepprg='rg --vimgrep --no-heading --smart-case'
 end
+
+vim.fn.matchadd('IncSearch', [[\s\+$]]); -- mark trailing spaces as errors
 
 -- Disable unnecessary providers
 vim.g.loaded_python3_provider = 0

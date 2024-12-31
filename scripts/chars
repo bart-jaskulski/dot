@@ -1,0 +1,19 @@
+#!/bin/bash
+# Count unique characters from all files in directory
+
+rg --files --no-binary --text | \
+  xargs cat | \
+  awk '
+    BEGIN { FS="" }
+    {
+        for(i=1;i<=NF;i++) {
+            chars[$i]++
+        }
+    }
+    END {
+        for (char in chars) {
+            printf "\"%s\" %d\n", char, chars[char]
+        }
+    }
+  ' | \
+  sort -rn -k2

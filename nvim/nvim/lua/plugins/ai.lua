@@ -12,7 +12,7 @@ return {
           adapter = "anthropic",
         },
         inline = {
-          adapter = "anthropic",
+          adapter = "anthropic_haiku",
         },
         agent = {
           adapter = "anthropic",
@@ -22,7 +22,18 @@ return {
         diff = {
           provider = "mini_diff"
         }
-      }
+      },
+      adapters = {
+        anthropic_haiku = function()
+          return require("codecompanion.adapters").extend("anthropic", {
+            schema = {
+              model = {
+                default = "claude-3-5-haiku-20241022",
+              },
+            },
+          })
+        end,
+      },
     }
   },
 }

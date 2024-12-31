@@ -18,8 +18,9 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 export TERM=tmux-256color
 export EDITOR=nvim
 export VISUAL=nvim
+export BROWSER=lynx
 export GITLAB_HOST='https://gitlab.wpdesk.dev'
-export GLAMOUR_STYLE=light
+export GLAMOUR_STYLE='light'
 export BAT_THEME="ansi"
 export LESS="-FXR"
 export LESS_TERMCAP_mb=$'\e[1;32m'
@@ -30,7 +31,14 @@ export LESS_TERMCAP_so=$'\e[01;33m'
 export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 export PNPM_HOME="$HOME/.local/share/pnpm"
+export SUDO_ASKPASS="$HOME/Scripts/dmenupass"
+export GOBIN="$HOME/.local/bin"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
+export DISPLAY=:0
 # export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
+# export http_proxy="http://127.0.0.1:7080"
+# export https_proxy="http://127.0.0.1:7080"
+# export no_proxy="localhost,127.0.0.1,::1"
 
 # ----------------------------- dircolors ----------------------------
 
@@ -53,7 +61,7 @@ pathappend() {
     PATH=${PATH/%":$arg"/}
     export PATH="${PATH:+"$PATH:"}$arg"
   done
-} && export -f pathappend
+}
 
 pathprepend() {
   for arg in "$@"; do
@@ -63,14 +71,17 @@ pathprepend() {
     PATH=${PATH/%":$arg"/}
     export PATH="$arg${PATH:+":${PATH}"}"
   done
-} && export -f pathprepend
+}
 
 pathprepend "$HOME/Scripts"
 
 pathappend "$HOME/.config/composer/vendor/bin" \
+  "$HOME/.local/share/nvim/mason/bin" \
+  "$HOME/.local/bin" \
   "$HOME/go/bin" \
   "$PNPM_HOME" \
-  "$HOME/bin"
+  "$HOME/bin" \
+  "$HOME/.cargo/bin"
 
 #--------------- cdpath
 
@@ -89,10 +100,10 @@ shopt -s dirspell
 
 #------------------ history ---------------------
 
-export HISTCONTORL=ignoreboth
-export HISTSIZE=50000
+export HISTCONTORL="ignoreboth:erasedups"
+export HISTSIZE=100000
 export HISTFILESIZE=100000
-export HISTIGNORE="exit:x:k:clear:history"
+export HISTIGNORE="exit:x:t:k:clear:history:mods:shut"
 
 set -o vi
 shopt -s histappend
@@ -102,40 +113,82 @@ shopt -s cmdhist
 #                 (keeping in bashrc for portability)
 
 __ps1() {
-  local P='$' dir B changes_count last_commit\
+  local P='$' dir B truncated_path\
     r='\[\e[31m\]' g='\[\e[30m\]' u='\[\e[33m\]'\
     p='\[\e[34m\]' w='\[\e[35m\]' b='\[\e[36m\]'\
     x='\[\e[0m\]';
 
   [[ $EUID == 0 ]] && P='#' && u=$r && p=$u; # root
-  [[ $PWD = / ]] && dir=/;
-  [[ $PWD = "$HOME" ]] && dir='~';
 
-  if [[ ! -n "$dir" ]]; then
-    IFS=/;
-    read -ra dirs <<< "${PWD/"$HOME"/"~"}";
-    truncate=();
-    for dir in "${dirs[@]:0:((${#dirs[@]} - 1))}";
-    do
-      if [[ "${dir:0:1}" == "." ]]; then
-        truncate+=("${dir:0:2}");
-      else
-        truncate+=("${dir:0:1}");
-      fi;
-    done;
-    dir="${truncate[*]}/${dirs[-1]}";
-    IFS=;
-  fi;
+  IFS=/ read -ra dirs <<< "${PWD/"$HOME"/"~"}";
+  for dir in "${dirs[@]:0:((${#dirs[@]} - 1))}";
+  do
+    if [[ "${dir:0:1}" == "." ]]; then
+      truncated_path+="${dir:0:2}/";
+    else
+      truncated_path+="${dir:0:1}/";
+    fi;
+  done;
+  dir="$truncated_path${dirs[-1]}";
+  [[ -z "$dir" ]] && dir=/;
 
-  changes_count=$(git status --porcelain 2>/dev/null | awk '{a[$1]++} END {for (pair in a) {printf("%s %d%s", pair, a[pair], (++i==length(a))?ORS:", ")}}')
-  last_commit=$(git log -1 --format=%cd --date=format:%d.%m.%g 2>/dev/null)
 
-  B=$(git branch --show-current 2>/dev/null);
-  [[ $dir = "$B" ]] && B=.;
+  if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = 'true' ]]; then
+B=$(git \
+    --no-pager \
+    --no-optional-locks \
+    status \
+    --porcelain=v2 \
+    --branch \
+    2>/dev/null \
+| awk '
+BEGIN {
+    c["reset"] = "\033[0m"
+    c["red"] = "\033[31m"
+    c["green"] = "\033[32m"
+    c["blue"] = "\033[34m"
+    # escaping
+    for (i in c) c[i] = "\001" c[i] "\002"
+}
 
-  [[ $B = master || $B = main ]] && b="$r";
-  [[ -n "$B" ]] && B="$b($B@$last_commit)$x";
-  [[ -n "$changes_count" ]] && B+="$p[${changes_count}]$x";
+/^# branch\.head/ {
+ branch = $3
+}
+/^\?/ { count["??"]++ }
+/^[0-9] A. / { count["A"]++ }
+/^[0-9] .M / { count["M"]++ }
+/^[0-9] .D / { count["D"]++ }
+/^u UU/ { count["UU"]++ }
+
+END {
+    if (branch == "master" || branch == "main") {
+      output = c["red"]
+    } else {
+      output = c["green"]
+    }
+    output = output "(" branch ")"
+
+    if (length(count) > 0) {
+        output = output c["blue"] "["
+    for (i in count) {
+        output = output sprintf("%s %d%s", i, count[i], (++a==length(count))?"":", ")
+    }
+        output = output "]"
+    }
+    print output
+}
+')
+  #   changes_count=$(git status --porcelain | awk '{a[$1]++} END {for (pair in a) {printf("%s %d%s", pair, a[pair], (++i==length(a))?ORS:", ")}}')
+  #   last_commit=$(git log -1 --format=%cd --date=format:%d.%m.%g 2>/dev/null)
+  #
+  #   B=$(git branch --show-current);
+  #
+  #   [[ $B = master || $B = main ]] && b="$r";
+  #   B="$b($B";
+  #   [[ -n "$last_commit" ]] && B+="@$last_commit";
+  #   B+=")$x";
+  #   [[ -n "$changes_count" ]] && B+="$p[${changes_count}]$x";
+  fi
 
   PS1="$w$dir$B\n$g$p$P$x "
 }
@@ -150,6 +203,7 @@ _have setxkbmap && test -n "$DISPLAY" && \
 #---------------- aliases -----------------
 
 unalias -a
+alias tm=tmux
 alias c=composer
 alias ls='ls -h --color=auto'
 alias ll='ls -al'
@@ -161,15 +215,17 @@ alias ...='cd ../..'
 alias chmox='chmod +x'
 alias temp='cd $(mktemp -d)'
 alias k='clear'
-alias r=ranger
-alias vi=vim
+alias e=$EDITOR
 alias g='git'
+alias cal='ncal -bM'
+alias cat='bat'
 
-if [ -f "/usr/share/git/completion/git-completion.bash" ]; then
-  source /usr/share/git/completion/git-completion.bash
+# ------------- source external dependencies / completion ------------
+
+if [ -f "/usr/share/bash-completion/completions/git" ]; then
+  source /usr/share/bash-completion/completions/git
   __git_complete g __git_main
 fi
-
 # Copied from bash skeleton to make sure we load completions
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -178,15 +234,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-_have gh && . <(gh completion -s bash)
-# This is extremely slow
-# _have composer && . <(composer completion)
-_have glab && . <(glab completion)
-
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 #     ____      ____
 #    / __/___  / __/
@@ -201,7 +248,7 @@ _have glab && . <(glab completion)
 # - $FZF_ALT_C_COMMAND
 # - $FZF_ALT_C_OPTS
 
-export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*'"
+# export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git/*'"
 
 # Key bindings
 # ------------
@@ -212,7 +259,7 @@ __fzfcmd() {
 
 __fzf_history__() {
   local output opts script
-  opts="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m --read0"
+  opts="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m --read0"
   script='BEGIN { getc; $/ = "\n\t"; $HISTCOUNT = $ENV{last_hist} + 1 } s/^[ *]//; print $HISTCOUNT - $. . "\t$_" if !$seen{$_}++'
   output=$(
     builtin fc -lnr -2147483648 |
@@ -238,3 +285,11 @@ bind -m emacs-standard '"\C-z": vi-editing-mode'
 bind -m emacs-standard '"\C-r": "\C-e \C-u\C-y\ey\C-u"$(__fzf_history__)"\e\C-e\er"'
 bind -m vi-command -x '"\C-r": __fzf_history__'
 bind -m vi-insert -x '"\C-r": __fzf_history__'
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

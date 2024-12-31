@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -z "$1" ] && [ -t 0 ]; then
+  cat ~/.bookmarks
+elif [ -z "$1" ]; then
+  while IFS= read -r line; do
+    echo "$line" >> ~/.bookmarks
+  done
+else
+  echo "$@" | tr -d '\r\n ' >> ~/.bookmarks
+  echo >> ~/.bookmarks
+fi
+
+exit

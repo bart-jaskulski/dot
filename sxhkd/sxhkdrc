@@ -10,5 +10,5 @@ XF86Audio{Raise,Lower}Volume
 @Print
 	scrr
 
-F{8,9,10}
-	{firefox,dmenu_run,st}
+F{2,3}
+	{dmenu_run,st}

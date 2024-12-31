@@ -1,9 +1,14 @@
 set download-timeout 10
 set scrolloff 10
 set open-in-browser-command 'lynx "%l"'
-set initial-unread-first-sorting true
-set items-count-limit 100
+# set initial-unread-first-sorting true
+set item-limit 100
+set menu-feed-sorting unread-desc
 
-set color-list-item-unread-fg green
-set color-list-section-unread-fg green
-set color-list-feed-unread-fg green
+set color-list-item-unread green default
+set color-list-section-unread green default
+set color-list-feed-unread green default
+
+bind s exec bm "%l"
+bind v exec rdr "%l"
+bind O exec setsid xdg-open "%l" &>/dev/null &

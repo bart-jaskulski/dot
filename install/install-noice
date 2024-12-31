@@ -1,0 +1,11 @@
+#!/bin/sh
+
+dir="$(mktemp -d)"
+
+cleanup() {
+  rm -rf "$dir"
+}
+trap cleanup EXIT
+
+git clone git://git.2f30.org/noice "$dir"
+make -C "$dir" all install

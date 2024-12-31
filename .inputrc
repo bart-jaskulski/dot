@@ -1,0 +1,37 @@
+# set input-meta on
+# set output-meta on
+
+# Always use vi mode
+set editing-mode vi
+set keymap vi
+
+# We don't need any bells
+set bell-style none
+
+# When using bash completion, allow more "loose" approach
+set completion-ignore-case on
+set completion-map-case on
+
+# Show more information and color on completion
+set visible-stats on
+set colored-stats on
+
+# set horizontal-scroll-mode off
+# set print-completions-horizontally on
+set page-completions off
+
+set mark-symlinked-directories on
+
+TAB: menu-complete
+
+# set keymap vi-command
+# # these are for vi-command mode
+# TAB: menu-complete
+# Control-l: clear-screen
+# Control-a: beginning-of-line
+# 
+# set keymap vi-insert
+# # these are for vi-insert mode
+# TAB: menu-complete
+# Control-l: clear-screen
+# Control-a: beginning-of-line

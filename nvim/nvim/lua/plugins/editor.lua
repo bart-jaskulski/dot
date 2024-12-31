@@ -47,113 +47,76 @@ return {
     },
   },
   {
-    'echasnovski/mini.pick',
-    dependencies = {
-      'echasnovski/mini.extra',
-      opts = {}
-    },
-    cmd = "Pick",
-    opts = function()
-      return {
-        -- Keys for performing actions. See `:h MiniPick-actions`.
-        mappings = {
-          choose            = '<CR>',
-          choose_in_split   = '<M-s>',
-          choose_in_tabpage = '<M-t>',
-          choose_in_vsplit  = '<M-v>',
-          choose_marked     = '<M-CR>',
-
-          mark              = '<M-Space>',
-          mark_all          = '<M-a>',
-
-          paste             = '<C-r>',
-
-          refine            = '<C-Space>',
-          refine_marked     = '',
-
-          scroll_down       = '<C-f>',
-          scroll_left       = '<C-h>',
-          scroll_right      = '<C-l>',
-          scroll_up         = '<C-b>',
-
-          stop              = '<Esc>',
-
-          toggle_info       = '<S-Tab>',
-          toggle_preview    = '<Tab>',
-        },
-
-        -- General options
-        options = {
-          -- Whether to show content from bottom to top
-          content_from_bottom = false,
-
-          -- Whether to cache matches (more speed and memory on repeated prompts)
-          use_cache = true,
-        },
-
-        -- Source definition. See `:h MiniPick-source`.
-        source = {
-          items         = nil,
-          name          = nil,
-          cwd           = nil,
-
-          match         = nil,
-          show          = nil,
-          preview       = nil,
-
-          choose        = nil,
-          choose_marked = nil,
-        },
-
-        window = {
-          config = function()
-            local height = math.floor(0.618 * vim.o.lines)
-            local width = math.floor(0.618 * vim.o.columns)
-            return {
-              anchor = 'NW',
-              height = height,
-              width = width,
-              row = math.floor(0.5 * (vim.o.lines - height)),
-              col = math.floor(0.5 * (vim.o.columns - width)),
-            }
-          end,
-        }
-      }
-    end,
-    init = function()
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "VeryLazy",
-        callback = function()
-          vim.ui.select = function(...)
-            require("lazy").load({ plugins = { "mini.pick" } })
-            return MiniPick.ui_select(...)
-          end
-        end,
-      })
-    end,
-    keys = {
-      { '<leader>f', '<cmd>Pick files<cr>',                       desc = 'Open file picker' },
-      {
-        '<leader>F',
-        function()
-          MiniPick.builtin.files({}, { source = { cwd = vim.fn.expand("%:p:h") } })
-        end,
-        desc = 'Open file picker at current working directory',
+    'ibhagwan/fzf-lua',
+    -- dependencies = 'echasnovski/mini.icons',
+    cmd = 'FzfLua',
+    opts = {
+      defaults = {
+        formatter = "path.filename_first",
+        -- formatter = "path.dirname_first",
+        preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
       },
-      { '<leader>b', '<cmd>Pick buffers<cr>',                     desc = 'Open buffer picker',                          silent = true },
-      { '<leader>/', '<cmd>Pick grep_live<cr>',                   desc = 'Global search in workspace folder' },
-      { '<leader>q', '<cmd>Pick list scope="quickfix"<cr>',       desc = 'Open quickfix list picker' },
-      { '<leader>l', '<cmd>Pick list scope="location"<cr>',       desc = 'Open location list picker' },
-      { '<leader>*', '<cmd>Pick grep pattern="<cword>"<cr>',      desc = 'Global search for a word in workspace folder' },
-      { 'gO',        '<cmd>Pick lsp scope="document_symbol"<cr>', desc = 'Open symbol picker' },
-      { 'grr',       '<cmd>Pick lsp scope="references"<cr>',      desc = 'Open symbol picker' },
-      { 'gri',       '<cmd>Pick lsp scope="implementation"<cr>',  desc = 'Open symbol picker' },
-      { '<leader>d', '<cmd>Pick diagnostic<cr>',                  desc = 'Open diagnostic picker' },
-      -- { "<leader>'", '<cmd>FzfLua<cr>',                                            desc = 'Open picker' },
-      { "q:",        '<cmd>Pick history scope=":"<cr>',           desc = 'Vim command history' },
-      { "q/",        '<cmd>Pick history scope="/"<cr>',           desc = 'Vim command history' },
-      { "z=",        "<cmd>Pick spellsuggest<cr>",                desc = 'Spell suggest' },
-    }
+      keymap = {
+        fzf = {
+          ["alt-space"] = "toggle",
+          ["alt-a"] = "toggle-all",
+        }
+      },
+      actions = {
+        quickfix = {
+          ["default"] = function(selected, opts)
+            if #selected == 1 then
+              vim.inspect(selected)
+              vim.inspect(opts)
+            end
+            return require("fzf-lua.actions").file_edit_or_qf(selected, opts)
+          end
+        },
+      },
+      buffers = { cwd_only = true, },
+      oldfiles = {
+        cwd_only = true,
+        include_current_session = true
+      },
+      grep = {
+        multiline = 1,
+        rg_glob = true,
+      },
+      files = {
+        cwd_prompt = false,
+      },
+      builtin = {
+        treesitter = {
+          disabled = { "xdefaults" }
+        }
+      },
+      winopts = {
+        width = 0.8,
+        height = 0.8,
+        row = 0.5,
+        col = 0.5,
+        preview = {
+          scrollchars = { "┃", "" },
+        },
+      },
+    },
+    keys = {
+      { '<leader>f', function() require('fzf-lua').files() end,                    desc = 'Open file picker',                              silent = true },
+      { '<leader>F', function() require('fzf-lua').files({ cwd = "%:p:h" }) end,   desc = 'Open file picker at current working directory', silent = true },
+      { '<leader>b', function() require('fzf-lua').buffers() end,                  desc = 'Open buffer picker',                            silent = true },
+      { '<leader>/', function() require('fzf-lua').live_grep() end,                desc = 'Global search in workspace folder' },
+      { '<leader>q', function() require('fzf-lua').quickfix() end,                 desc = 'Open quickfix list picker' },
+      { '<leader>l', function() require('fzf-lua').loclist() end,                  desc = 'Open location list picker' },
+      { '<leader>*', function() require('fzf-lua').grep_cword() end,               desc = 'Global search for a word in workspace folder' },
+      { 'gO', function() require('fzf-lua').lsp_document_symbols() end,     desc = 'Open symbol picker' },
+      { 'grr', function() require('fzf-lua').lsp_references() end,     desc = 'Open LSP references picker' },
+      { 'gri', function() require('fzf-lua').lsp_implementations() end,     desc = 'Open LSP implementations picker' },
+      { '<leader>d', function() require('fzf-lua').lsp_document_diagnostics() end, desc = 'Open diagnostic picker' },
+      { "<leader>'", '<cmd>FzfLua<cr>',                                            desc = 'Open picker' },
+      { "q:",        function() require('fzf-lua').command_history() end,          desc = 'Vim command history' },
+      { "q/",        function() require('fzf-lua').search_history() end,           desc = 'Open picker' },
+      { "z=",        function() require('fzf-lua').spell_suggest() end,            desc = 'Spell suggest' },
+    },
   },
   {
     'echasnovski/mini.diff',
@@ -171,11 +134,11 @@ return {
   },
   {
     'echasnovski/mini.jump',
-    opts = {},
-    keys = { 'f', 'F', 't', 'T' }
+    event = "VeryLazy",
   },
   {
     'aserowy/tmux.nvim',
+    event = "VeryLazy",
     opts = {
       copy_sync = {
         enable = false
@@ -184,6 +147,5 @@ return {
         enable_default_keybindings = false
       }
     },
-    keys = { '<c-l>', '<c-h>', '<c-k>', '<c-j>' }
   }
 }

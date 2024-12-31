@@ -7,7 +7,7 @@ vim.g.mapleader = ' '
 vim.opt.autoindent = true
 vim.opt.autoread = true -- automatically read a file if changed outside
 vim.opt.autowrite = true -- automatically write files when changing when multiple files open
-vim.opt.clipboard='unnamed'
+vim.opt.clipboard='unnamedplus'
 vim.opt.cmdheight = 1
 vim.opt.colorcolumn='80'
 vim.opt.complete:remove { 't' ,'i' }
@@ -98,3 +98,21 @@ vim.g.loaded_python3_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_node_provider = 0
+
+-- Improve netrw
+vim.g.netrw_keepdir = 1
+vim.g.netrw_winsize = 20
+vim.g.netrw_banner = 0
+-- vim.g.netrw_list_hide = '\\(^\\|\\s\\s\\)\\zs\\.\\S\\+' .. vim.fn.netrw_gitignore.Hide()
+vim.g.netrw_hide = 1
+vim.g.netrw_localcopydircmdopt = ' -Rr'
+vim.g.netrw_localmkdiropt = ' -p'
+vim.g.netrw_localrmdiropt = ' -p'
+
+-- Tree display
+vim.g.netrw_liststyle = 3
+vim.g.netrw_sizestyle = "H"
+
+-- Highlight link
+vim.cmd('hi! link netrwMarkFile Search')
+

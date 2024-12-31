@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODE="$1"
-ROTATION="${2:-'normal'}"
+ROTATION="${2:-normal}"
 INTERNAL_MONITOR="eDP-1"
 EXTERN_MONITOR="HDMI-1"
 

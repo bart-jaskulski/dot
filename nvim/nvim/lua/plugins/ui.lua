@@ -1,5 +1,21 @@
 return {
   {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,
+    priority = 1000,
+    opts = {
+        options = {
+          -- ["styles.comments"] = 'italic',
+          transparent = true,
+          dim_inactive = true
+        }
+    },
+    init = function()
+      vim.cmd('colorscheme github_light')
+    end
+  },
+  {
     "echasnovski/mini.statusline",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
@@ -20,7 +36,6 @@ return {
           end
 
           local mode, mode_hl = MiniStatusline.section_mode({trunc_width = 1000})
-          local location      = '%l:%v (%p%%)'
           local filename      = filenameFunc()
           local search        = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
@@ -30,7 +45,6 @@ return {
             { hl = 'MiniStatuslineFilename', strings = { filename } },
             '%=', -- End left alignment
             { hl = 'MiniStatuslineFileinfo', strings = { search } },
-            { hl = mode_hl,                  strings = { location } },
           })
         end,
 
@@ -78,6 +92,18 @@ return {
           vim.b.miniindentscope_disable = true
         end,
       })
+    end,
+  },
+  {
+    'echasnovski/mini.hipatterns',
+    event = "VeryLazy",
+    opts = function()
+      local hi = require("mini.hipatterns")
+      return {
+        highlighters = {
+          hex_color = hi.gen_highlighter.hex_color(),
+        },
+      }
     end,
   },
 }

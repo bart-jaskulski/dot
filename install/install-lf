@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eou pipefail
+
+if ! type go >/dev/null; then
+    echo "Go is not installed. Please install go and try again."
+    exit 1
+fi
+
+CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest

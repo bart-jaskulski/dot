@@ -1,0 +1,86 @@
+#!/usr/bin/env bun
+import { readFileSync, writeFileSync } from 'fs';
+import fetch from 'node-fetch';
+
+const apiUrl = 'https://portal-backend-4yrha.ondigitalocean.app/api/iksoris-entries?pagination%5Bpage%5D=1&pagination%5BpageSize%5D=250&sort%5B0%5D=showDate%3Aasc&next%5Bcache%5D=no-store';
+const filePath = '/home/bjaskulski/.cache/spectacles.json';
+
+async function main() {
+  const previousData = read();
+  if (!previousData) {
+    write({data: [], meta: {}});
+    console.log('Initial data saved to file');
+    process.exit(1)
+  }
+
+  const currentData = await fetchData();
+  if (!currentData) {
+    process.exit(1)
+  }
+
+  const newItems = currentData.data.filter(currentItem => {
+    return !previousData.data.some(previousItem => previousItem.attributes.iksorisID === currentItem.attributes.iksorisID);
+  });
+
+  const availableItems = newItems.filter(item => item.attributes.seatsAvailable > 0);
+
+  if ( newItems.length > 0) {
+    write(currentData);
+  }
+
+  if (availableItems.length > 0) {
+    console.info('New items found:');
+    const groupedItems = availableItems.reduce((spectacles, item) => {
+      return {
+        ...spectacles,
+        [item.attributes.title.trim()]: [...(spectacles[item.attributes.title.trim()] || []), item.attributes]
+      }
+    }, {});
+    Object.entries(groupedItems).forEach(([title, items]) => {
+      console.log(`${title}:`);
+      items.forEach(item => console.log(`\t${item.showDate} ${item.showTime}, ${item.venue}. ${item.seatsAvailable} tickets available.`));
+    })
+    process.exit(0);
+  } else {
+    console.error('No new items found');
+    process.exit(1);
+  }
+}
+
+async function fetchData() {
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+}
+
+function read() {
+  try {
+    const data = readFileSync(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.warn('Error reading data from file:', error);
+    return null;
+  }
+}
+
+function write(data) {
+  try {
+    writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (error) {
+    console.warn('Error writing data to file:', error);
+  }
+}
+
+function formatItem(item) {
+  return `Spektakl '${item.title}' grany na ${item.venue}, ${item.showDate} o ${item.showTime}. Zostało ${item.seatsAvailable} miejsc. Kup bilet: ${item.buyTicketUrl}`;
+}
+
+
+main();
+
+// vim: ts=4 ft=javascript

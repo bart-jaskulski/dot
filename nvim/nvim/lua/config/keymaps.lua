@@ -39,9 +39,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.keymap.set('n', '<leader><TAB>', function()
-  require 'nvim-tree.api'.tree.toggle()
-end, { desc = 'Toggle file explorer' })
+-- vim.keymap.set('n', '<leader><TAB>', function()
+--   require 'nvim-tree.api'.tree.toggle()
+-- end, { desc = 'Toggle file explorer' })
 
 -- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { silent = true, desc = "Move down" })
@@ -73,3 +73,6 @@ vim.keymap.set("n", "n", "nzzzv", { desc = "Fwd  search '/' or '?'" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Back search '/' or '?'" })
 
 vim.cmd([[inoremap <script><silent><nowait><expr> <Tab> pumvisible() ? "\<C-y>" : codeium#Accept()]])
+
+-- Open explorer in cwd
+vim.keymap.set('n', '<leader><TAB>', ':Lexplore %:p:h<CR>', { noremap = true, silent = true })

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Function to concatenate files recursively
+concatenate_files() {
+    local dir="$1"
+    local output_file="$2"
+
+    # Iterate over files and directories in the current directory
+    for entry in "$dir"/*; do
+        if [ -d "$entry" ]; then
+            # If it's a directory, call the function recursively
+            concatenate_files "$entry" "$output_file"
+        elif [ -f "$entry" ]; then
+            # If it's a file, append it to the output file
+            {
+              echo "-------------------------------------------------"
+              echo "$entry"
+              echo "-------------------------------------------------"
+              cat "$entry"
+            } >> "$output_file"
+        fi
+    done
+}
+
+# Check if the directory argument is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <directory> [output_file]"
+    exit 1
+fi
+
+# Set the output file name
+output_file="${2:-output.md}"
+
+# Create an empty output file
+: > "$output_file"
+
+# Call the concatenate_files function with the provided directory
+concatenate_files "$1" "$output_file"
+
+echo "Files concatenated successfully to $output_file"

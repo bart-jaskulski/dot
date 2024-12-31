@@ -7,3 +7,7 @@ node_modules
 tags
 .phpactor.json
 Session.vim
+.phpstorm.meta.php
+.aider*
+.ddev
+wp-config-ddev.php

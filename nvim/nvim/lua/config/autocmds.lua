@@ -84,3 +84,38 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     vim.api.nvim_set_hl(0, 'SpellBad', {default=true,fg='#da1242', underline=true})
   end,
 })
+
+vim.api.nvim_create_augroup('netrw_mapping', { clear = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'netrw_mapping',
+  pattern = 'netrw',
+  callback = function()
+    vim.keymap.set('n', 'H', 'u', { buffer = true })
+    vim.keymap.set('n', 'h', '-^', { buffer = true })
+    vim.keymap.set('n', 'l', '<CR>', { buffer = true, remap = true })
+
+    vim.keymap.set('n', 'P', '<C-w>z', { buffer = true })
+    vim.keymap.set('n', 'L', '<CR>:Lexplore<CR>', { buffer = true })
+    vim.keymap.set('n', '<leader><TAB>', ':q<CR>', { buffer = true })
+    vim.keymap.set('n', '~', function()
+      vim.cmd('edit ' .. vim.fn.getcwd())
+    end, { buffer = true })
+    vim.keymap.set('n', 'l', '<CR>', {buffer = true})
+
+    vim.keymap.set('n', 'h', '-', {buffer = true, desc = 'Close directory or go up a directory'})
+
+    vim.keymap.set('n', 'n', '%', {buffer = true, desc = 'Create new file'})
+
+    vim.keymap.set('n', 'r', 'R', {buffer = true, desc = 'Rename file'})
+
+    vim.keymap.set('n', 'd', 'D', {buffer = true, desc = 'Delete file'})
+
+    vim.keymap.set('n', 'c', 'mc', {buffer = true, desc = 'Copy file'})
+
+    vim.keymap.set('n', 'p', 'mp', {buffer = true, desc = 'Paste file'})
+
+  end
+})
+
+

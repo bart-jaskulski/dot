@@ -10,6 +10,6 @@ fzf --ansi \
     --disabled --query "$INITIAL_QUERY" \
     --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
     --delimiter : \
-    --preview 'bat --theme=ansi --color=always {1} --highlight-line {2}' \
+    --preview 'bat --terminal-width 100 --theme=ansi --color=always {1} --highlight-line {2}' \
     --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-    --bind 'enter:become(vim {1} +{2})'
+    --bind "enter:become($EDITOR {1} +{2})"

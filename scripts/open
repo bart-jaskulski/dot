@@ -1,0 +1,18 @@
+#!/bin/bash
+
+FILE=$1;
+if test -n "$TMUX"; then
+  COMMAND='tmux neww'
+else
+  COMMAND='';
+fi
+
+if [[ "$FILE" =~ "github" ]]; then
+  exec $COMMAND gh repo view "$FILE"
+fi;
+
+if [[ "$FILE" =~ "http" ]]; then
+  exec $COMMAND lynx "$FILE"
+fi;
+
+exec $COMMAND xdg-open "$FILE";

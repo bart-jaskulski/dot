@@ -5,10 +5,18 @@
 [core]
   excludesFile = ~/.gitignore
   autocrlf = input
+  pager = delta
+  untrackedCache = true
+  fsmonitor = true
+[interactive]
+  diffFilter = delta --color-only --features=interactive
 [commit]
   gpgsign = true
-  template = ~/.gitmessage
+  # template = ~/.gitmessage
   verbose = true
+[diff]
+  algorithm = histogram
+  colorMoved = default
 [color]
   ui = auto
 [color "branch"]
@@ -26,11 +34,12 @@
   untracked = cyan
 [merge]
   ff = false
+  conflictstyle = zdiff3
 [help]
   autocorrect = 1
 [init]
   defaultBranch = main
-  templatedir = ~/.git_template
+  # templatedir = ~/.git_template
 [includeIf "gitdir:~/Repos/WPDesk/"]
   path = ~/Repos/WPDesk/.gitconfig
 [push]
@@ -41,6 +50,7 @@
   sort = version:refname
 [alias]
   a = add
+  ap = add --patch
   all = add --all
   df = diff
   dfc = diff --cached
@@ -55,3 +65,22 @@
   pl = pull
   st = stash push
   sw = switch
+
+  lasttag = describe --abbrev=0 --tags
+  # Output all the changes since the most recent tag as a Markdown list:
+  # git changelog
+  # git changelog HEAD~5...
+  changelog = "!_() { \
+    range=${1:-$(git lasttag)...HEAD}; \
+    printf '\nChanges since %s\n\n' $range; \
+    git --no-pager log --reverse --no-merges --oneline \
+    --pretty=format:'- %s' \
+    $range; \
+    printf '\n'; \
+    };_"
+# [blame]
+# 	ignoreRevsFile = .git-blame-ignore-revs
+[delta]
+  navigate = true
+  light = true
+  line-numbers = true

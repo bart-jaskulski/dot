@@ -1,0 +1,73 @@
+#!/usr/bin/env sh
+# Output a fast, succinct, one-line Git status for use in a prompt
+#
+# E.g.:
+#     1ac744a5522d UUAM? master+1-5 origin/master
+#
+# Usage:
+#     git prompt
+#     git-prompt /path/to/repo
+#     git-prompt -c tmux
+#     git-prompt -c ansi
+#     git-prompt -c bash
+#     git-prompt -c zsh
+
+color=""
+while getopts hc: opt; do
+    case $opt in
+    c) color="$OPTARG";;
+    h) awk 'NR == 1 { next } /^$/ { exit } { print substr($0, 3) }' "$0"
+       exit ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+tgtdir="${1:-$PWD}"
+
+git \
+    -C "$tgtdir" \
+    --no-pager \
+    --no-optional-locks \
+    status \
+    --porcelain=v2 \
+    --branch \
+    2>/dev/null \
+| awk -v color="$color" '
+BEGIN {
+    if (color == "bash") { color = "ansi"; escape = "bash" }
+    else if (color == "zsh") { color = "ansi"; escape = "zsh" }
+
+    if (color == "ansi") {
+        c["reset"] = "\033[0m"
+        c["red"] = "\033[31m"
+        c["green"] = "\033[32;1m"
+        c["yellow"] = "\033[33;1m"
+    } else if (color == "tmux") {
+        c["reset"] = "#[fg=terminal]"
+        c["red"] = "#[fg=red]"
+        c["green"] = "#[fg=green,bold]"
+        c["yellow"] = "#[fg=yellow,bold]"
+        c["blue"] = "#[fg=blue]"
+    }
+
+    if (escape == "bash") { for (i in c) c[i] = "\001" c[i] "\002" }
+    else if (escape == "zsh") { for (i in c) c[i] = "%{" c[i] "%}" }
+}
+
+/^# branch\.head/ {
+ branch = $3
+}
+/^\?/ { count["??"]++ }
+/^[0-9] A. / { count["A"]++ }
+/^[0-9] .M / { count["M"]++ }
+/^[0-9] .D / { count["D"]++ }
+/^u UU/ { count["UU"]++ }
+
+END {
+    output = c["reset"] branch " "
+    for (i in count) {
+        output = output c["blue"] sprintf("%s%d ", i, count[i])
+    }
+    print output
+}
+'

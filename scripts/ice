@@ -1,0 +1,56 @@
+#!/bin/sh
+# Calculate ICE score from projects directory
+#
+# Files are expected to maintain at least the following format:
+# # Title
+# Impact: X
+# Confidence: X
+# Ease: X
+# Category: A, B, C
+
+exec awk '
+BEGIN {
+    multipliers["Learning"] = 0.9
+    multipliers["Optimization"] = 0.5
+    multipliers["Business Idea"] = 0.7
+}
+
+FNR == 1 {
+    reset()
+}
+
+{
+    if ($1 == "Impact:") impact = $2
+    if ($1 == "Confidence:") confidence = $2
+    if ($1 == "Ease:") ease = $2
+    if ($1 == "Category:") categories = substr($0, 10)
+    if ($1 == "#" && substr($0, 3) != "") title = substr($0, 3)
+}
+
+ENDFILE {
+    score = impact * confidence * ease
+
+    if (categories) {
+        split(categories, cat_array, ",")
+        total_multiplier = 0
+        for (i in cat_array) {
+            cat = trim(cat_array[i])
+            total_multiplier += (multipliers[cat] ? multipliers[cat] : 0)
+        }
+        if (total_multiplier > 0) score *= total_multiplier / length(cat_array)
+    }
+
+    if (title) print score, title
+}
+
+function trim(str) {
+    gsub(/^[ \t]+|[ \t]+$/, "", str)
+    return str
+}
+
+function reset() {
+    impact = confidence = ease = 0
+    categories = title = ""
+}
+' ./* | sort -nr
+

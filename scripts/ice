@@ -7,12 +7,13 @@
 # Confidence: X
 # Ease: X
 # Category: A, B, C
+# Status: in progress | completed
 
 exec awk '
 BEGIN {
-    multipliers["Learning"] = 0.9
-    multipliers["Optimization"] = 0.5
-    multipliers["Business Idea"] = 0.7
+    multipliers["Learning"]        = 0.9
+    multipliers["Optimization"]    = 0.5
+    multipliers["Business Idea"]   = 0.7
 }
 
 FNR == 1 {
@@ -20,14 +21,23 @@ FNR == 1 {
 }
 
 {
-    if ($1 == "Impact:") impact = $2
-    if ($1 == "Confidence:") confidence = $2
-    if ($1 == "Ease:") ease = $2
-    if ($1 == "Category:") categories = substr($0, 10)
-    if ($1 == "#" && substr($0, 3) != "") title = substr($0, 3)
+    if ($1 == "Impact:")       impact = $2
+    if ($1 == "Confidence:")   confidence = $2
+    if ($1 == "Ease:")         ease = $2
+    if ($1 == "Category:")     categories = substr($0, 10)
+
+    if ($1 == "Status:")       status = tolower(substr($0, 9))
+
+    if ($1 == "#" && substr($0, 3) != "") {
+        title = substr($0, 3)
+    }
 }
 
 ENDFILE {
+    if (status ~ /completed/) {
+        next
+    }
+
     score = impact * confidence * ease
 
     if (categories) {
@@ -35,9 +45,17 @@ ENDFILE {
         total_multiplier = 0
         for (i in cat_array) {
             cat = trim(cat_array[i])
-            total_multiplier += (multipliers[cat] ? multipliers[cat] : 0)
+            if (multipliers[cat]) {
+                total_multiplier += multipliers[cat]
+            }
         }
-        if (total_multiplier > 0) score *= total_multiplier / length(cat_array)
+        if (total_multiplier > 0) {
+            score *= total_multiplier / length(cat_array)
+        }
+    }
+
+    if (status ~ /in progress/) {
+        score *= 1.2
     }
 
     if (title) print score, title
@@ -50,7 +68,6 @@ function trim(str) {
 
 function reset() {
     impact = confidence = ease = 0
-    categories = title = ""
+    categories = title = status = ""
 }
 ' ./* | sort -nr
-

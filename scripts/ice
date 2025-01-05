@@ -34,31 +34,29 @@ FNR == 1 {
 }
 
 ENDFILE {
-    if (status ~ /completed/) {
-        next
+    if (status !~ /completed/) {
+      score = impact * confidence * ease
+
+      if (categories) {
+          split(categories, cat_array, ",")
+          total_multiplier = 0
+          for (i in cat_array) {
+              cat = trim(cat_array[i])
+              if (multipliers[cat]) {
+                  total_multiplier += multipliers[cat]
+              }
+          }
+          if (total_multiplier > 0) {
+              score *= total_multiplier / length(cat_array)
+          }
+      }
+
+      if (status ~ /in progress/) {
+          score *= 1.2
+      }
+
+      if (title) print score, title
     }
-
-    score = impact * confidence * ease
-
-    if (categories) {
-        split(categories, cat_array, ",")
-        total_multiplier = 0
-        for (i in cat_array) {
-            cat = trim(cat_array[i])
-            if (multipliers[cat]) {
-                total_multiplier += multipliers[cat]
-            }
-        }
-        if (total_multiplier > 0) {
-            score *= total_multiplier / length(cat_array)
-        }
-    }
-
-    if (status ~ /in progress/) {
-        score *= 1.2
-    }
-
-    if (title) print score, title
 }
 
 function trim(str) {

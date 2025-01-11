@@ -15,7 +15,6 @@ cargo binstall -y tealdeer \
   bat \
   sd \
   jnv \
-  zoxide \
   television \
   fnm
 

@@ -1,5 +1,5 @@
 {
-  "codecompanion.nvim": { "branch": "main", "commit": "92f85a44aaf1f7466808b7412d7ab4584b2ad246" },
+  "codecompanion.nvim": { "branch": "main", "commit": "220ede7216298fa668b61ff851127ba4a212bcb8" },
   "codeium.nvim": { "branch": "main", "commit": "ebed4f7cc8a18184d8332d421ca10bed5f7d59a1" },
   "coq_nvim": { "branch": "coq", "commit": "976012b0c13763a47edbd55492ba53b03b498cdd" },
   "devdocs.vim": { "branch": "main", "commit": "798cc7d26db27906526345af65d900887b9d4160" },

@@ -47,6 +47,8 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-recurring-shipping'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-recurring-shipping",
+                ['/var/www/html/wp-content/plugins/flexible-subscriptions-stock-management'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-stock-management",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-payment-retry'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-payment-retry",
                 -- ['/var/www/html/wp-content/plugins/flexible-wishlist'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-wishlist",

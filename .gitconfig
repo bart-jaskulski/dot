@@ -65,6 +65,7 @@
   pl = pull
   st = stash push
   sw = switch
+  b = branch -v
 
   lasttag = describe --abbrev=0 --tags
   # Output all the changes since the most recent tag as a Markdown list:
@@ -84,3 +85,5 @@
   navigate = true
   light = true
   line-numbers = true
+[branch]
+	sort = -committerdate

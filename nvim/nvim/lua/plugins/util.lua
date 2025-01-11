@@ -55,5 +55,6 @@ return {
   {
     'echasnovski/mini.visits',
     opts = true
-  }
+  },
+  { 'girishji/devdocs.vim' }
 }

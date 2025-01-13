@@ -5,14 +5,16 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-        options = {
-          -- ["styles.comments"] = 'italic',
-          transparent = true,
-          dim_inactive = true
-        }
+      options = {
+        styles = {
+          comments = 'italic',
+        },
+        transparent = true,
+        dim_inactive = true,
+      }
     },
     init = function()
-      vim.cmd('colorscheme github_light')
+      vim.cmd.colorscheme('github_light')
     end
   },
   {

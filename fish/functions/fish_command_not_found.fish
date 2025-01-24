@@ -1,4 +1,9 @@
 function fish_command_not_found
+    if ! type -q mods
+        echo "Command not found: $argv[1]"
+        return 1
+    end
+
     # Get all arguments as a single string
     set -l cmd_string (string join " " $argv)
     
@@ -43,31 +48,3 @@ function fish_command_not_found
         return 1
     end
 end
-# function fish_command_not_found
-#     # Get all arguments as a single string
-#     set -l cmd_string (string join " " $argv)
-#
-#     # Call mods and store the response
-#     set -l ai_response (mods -qm flash -R shell -t "$cmd_string" "$cmd_string")
-#
-#     if test $status -eq 0
-#         # Show the suggested command
-#         echo "AI suggests running:"
-#         echo $ai_response
-#
-#         # Ask for confirmation
-#         read -l -P "Do you want to run this command? [y/N] " confirm
-#
-#         switch $confirm
-#             case y Y yes Yes YES
-#                 # Execute the command
-#                 eval $ai_response
-#             case '*'
-#                 echo "Command cancelled"
-#                 return 1
-#         end
-#     else
-#         echo "Failed to get AI suggestion"
-#         return 1
-#     end
-# end

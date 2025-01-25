@@ -5,7 +5,6 @@ ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 ln -sf "$PWD/.profile" "$HOME/.profile"
 ln -sf "$PWD/.profile" "$HOME/.bash_profile"
 ln -sf "$PWD/.tmux.conf" "$HOME/.tmux.conf"
-ln -sf "$PWD/scripts" "$HOME/Scripts"
 ln -sf "$PWD/.gitconfig" "$HOME/.gitconfig"
 ln -sf "$PWD/.gitignore" "$HOME/.gitignore"
 ln -sf "$PWD/.gitmessage" "$HOME/.gitmessage"
@@ -13,12 +12,30 @@ ln -sf "$PWD/.Xresources" "$HOME/.Xresources"
 
 # ln -sf "$PWD/.gitattributes" "$HOME/.gitattributes"
 
+rm -rf "$HOME/Scripts"
+rm -rf "$HOME/.config/atac"
+rm -rf "$HOME/.config/bat"
+rm -rf "$HOME/.config/fd"
+rm -rf "$HOME/.config/gh"
+rm -rf "$HOME/.config/glab-cli"
+rm -rf "$HOME/.config/mods"
+rm -rf "$HOME/.config/phpactor"
+rm -rf "$HOME/.config/ripgrep"
 rm -rf "$HOME/.config/nvim"
 rm -rf "$HOME/.config/fish"
+rm -rf "$HOME/.config/lynx"
+rm -rf "$HOME/.config/lf"
+
+ln -sf "$PWD/scripts" "$HOME/Scripts"
+ln -sf "$PWD/atac" "$HOME/.config/atac"
+ln -sf "$PWD/bat" "$HOME/.config/bat"
+ln -sf "$PWD/fd" "$HOME/.config/fd"
+ln -sf "$PWD/gh" "$HOME/.config/gh"
+ln -sf "$PWD/glab-cli" "$HOME/.config/glab-cli"
+ln -sf "$PWD/mods" "$HOME/.config/mods"
+ln -sf "$PWD/phpactor" "$HOME/.config/phpactor"
+ln -sf "$PWD/ripgrep" "$HOME/.config/ripgrep"
 ln -sf "$PWD/nvim" "$HOME/.config/nvim"
 ln -sf "$PWD/fish" "$HOME/.config/fish"
-
-for i in lynx; do
-  cd $i && ./setup
-  cd -
-done
+ln -sf "$PWD/lynx" "$HOME/.config/lynx"
+ln -sf "$PWD/lf" "$HOME/.config/lf"

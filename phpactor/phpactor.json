@@ -1,0 +1,32 @@
+{
+  "indexer.exclude_patterns": [
+    "/vendor/**/Tests/**/*",
+    "/vendor/**/tests/**/*",
+    "/vendor/composer/**/*",
+    "/extensions/**/*",
+    "/tests/**/*"
+  ],
+  "indexer.stub_paths": [
+    "/home/bjaskulski/Templates/WordPress/wp-admin",
+    "/home/bjaskulski/Templates/WordPress/wp-includes",
+    "/home/bjaskulski/Plugins/woocommerce/"
+  ],
+  "composer.autoloader_path": [
+    "%project_root%/vendor/autoload.php"
+  ],
+  "completion_worse.experimantal": true,
+  "language_server.profile": false,
+  "language_server.trace": false,
+  "language_server_phpstan.enabled": true,
+  "language_server_worse_reflection.inlay_hints.enable": true,
+  "language_server_worse_reflection.inlay_hints.types": true,
+  "language_server_completion.trim_leading_dollar": true,
+  "language_server.diagnostics_on_update": false,
+  "language_server_phpstan.tmp_file_disabled": true,
+  "worse_reflection.phpdoc_parser": "phpstan",
+  "worse_reflection.cache_lifetime": 10,
+  "language_server.diagnostic_exclude_paths": [
+     "vendor/**/*",
+     "vendor_prefixed/**/*"
+  ]
+}

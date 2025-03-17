@@ -1,5 +1,5 @@
 # Default model (gpt-3.5-turbo, gpt-4, ggml-gpt4all-j...).
-default-model: llama3.3
+default-model: flash
 # Text to append when using the -f flag.
 # format-text:
 #   markdown: 'Format the response as markdown without enclosing backticks.'
@@ -9,6 +9,14 @@ roles:
   "default": []
   shell:
     - file:///home/bjaskulski/.config/mods/shell.md
+  learn:
+    - file:///home/bjaskulski/.config/mods/learn.md
+  proof:
+    - file:///home/bjaskulski/.config/mods/proof.md
+  prompt:
+    - file:///home/bjaskulski/.config/mods/prompt.md
+  coder:
+    - file:///home/bjaskulski/.config/mods/coder.md
   short:
     - you are experienced senior developer
     - you always answer as short as possible
@@ -58,33 +66,10 @@ apis:
         aliases: ["4"]
         max-input-chars: 24500
         fallback: gpt-3.5-turbo
-      gpt-4-1106-preview:
-        aliases: ["128k"]
-        max-input-chars: 392000
-        fallback: gpt-4
-      gpt-4-32k:
-        aliases: ["32k"]
-        max-input-chars: 98000
-        fallback: gpt-4
-      gpt-3.5-turbo:
-        aliases: ["35t"]
-        max-input-chars: 12250
-        fallback: gpt-3.5
-      gpt-3.5-turbo-1106:
-        aliases: ["35t-1106"]
-        max-input-chars: 12250
-        fallback: gpt-3.5-turbo
-      gpt-3.5-turbo-16k:
-        aliases: ["35t16k"]
-        max-input-chars: 44500
-        fallback: gpt-3.5
   groq:
     base-url: https://api.groq.com/openai/v1
     api-key-env: GROQ_API_KEY
     models:
-      mixtral-8x7b-32768:
-        aliases: ["mixtral"]
-        max-input-chars: 98000
       llama-3.1-70b-versatile:
         aliases: ["llama3.1"]
         max-input-chars: 392000
@@ -99,28 +84,25 @@ apis:
     api-key:
     api-key-env: ANTHROPIC_API_KEY
     models: # https://docs.anthropic.com/en/docs/about-claude/models
-      claude-3-5-sonnet-20241022:
-        aliases: ["claude3.5-sonnet", "claude-3-5-sonnet", "sonnet-3.5", "sonnet"]
+      claude-3-7-sonnet-latest:
+        aliases: ["sonnet"]
         max-input-chars: 680000
       claude-3-5-haiku-20241022:
         aliases: ["haiku"]
         max-input-chars: 680000
-      claude-3-opus-20240229:
-        aliases: ["claude3-opus", "opus"]
-        max-input-chars: 680000
   google:
     models:
-      gemini-exp-1206:
-        aliases: ["gem"]
-        max-input-chars: 392000
-      gemini-1.5-pro-latest:
+      gemini-2.0-pro-exp-02-05:
         aliases: ["gemini"]
         max-input-chars: 392000
-      gemini-2.0-flash-exp:
-        aliases: ["flash"]
+      gemini-2.0-flash:
+        aliases: ["flash", "f"]
         max-input-chars: 392000
-      gemini-2.0-flash-thinking-exp-1219:
-        aliases: ["think"]
+      gemini-2.0-flash-thinking-exp:
+        aliases: ["think", "t"]
+        max-input-chars: 392000
+      learnlm-1.5-pro-experimental:
+        aliases: ["learn", "l"]
         max-input-chars: 392000
   deepseek:
     base-url: https://api.deepseek.com/

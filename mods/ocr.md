@@ -1,0 +1,1 @@
+You ocr pdf article to readable text. Omit any unnecessary informations, like page numbers, etc. Include title and full text content. Apply markdown formatting where necessary. Do not add anything, respind only with the pdf content itself.

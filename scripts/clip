@@ -1,3 +1,32 @@
 #!/bin/sh
 
-exec xclip -selection clipboard "$@"
+# Check if the first argument is -o (for paste/output)
+if [ "$1" = "-o" ]; then
+  # Check for Wayland
+  if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-paste > /dev/null; then
+    # Use wl-paste for Wayland
+    # Shift removes the -o argument, wl-paste doesn't need it
+    shift
+    exec wl-paste --no-newline "$@"
+  elif command -v xclip > /dev/null; then
+    # Use xclip -o for X11
+    exec xclip -selection clipboard -o "$@"
+  else
+    echo "Error: No suitable clipboard tool found (wl-paste or xclip)." >&2
+    exit 1
+  fi
+else
+  # Default action is copy
+  # Check for Wayland
+  if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy > /dev/null; then
+    # Use wl-copy for Wayland
+    exec wl-copy "$@"
+  elif command -v xclip > /dev/null; then
+    # Use xclip for X11
+    exec xclip -selection clipboard "$@"
+  else
+    echo "Error: No suitable clipboard tool found (wl-copy or xclip)." >&2
+    exit 1
+  fi
+fi
+

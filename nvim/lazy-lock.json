@@ -1,5 +1,5 @@
 {
-  "blink.cmp": { "branch": "main", "commit": "1cc3b1a908fbcfd15451c4772759549724f38524" },
+  "blink.cmp": { "branch": "main", "commit": "49f211fe5d729df53df4c042d7c3464cf47d199e" },
   "codecompanion.nvim": { "branch": "main", "commit": "7ffbc5a8f7ba349cea0c3f20bac6c404d4130a4a" },
   "coq_nvim": { "branch": "coq", "commit": "d83bc18d044cfcd65e91dc49740a353546bc143b" },
   "fzf-lua": { "branch": "main", "commit": "96d0aeb27eb5a723c7d39e1f813e8e8146a2248a" },
@@ -13,7 +13,6 @@
   "mini.jump": { "branch": "main", "commit": "1fb371cfdcb314c5faa272976f23514f264bd755" },
   "mini.sessions": { "branch": "main", "commit": "f38354b72c11d5bbb2153183fa6ba0cf238147d5" },
   "mini.statusline": { "branch": "main", "commit": "ec3adf7813b7604275dd4a28433e9c9610b70f1b" },
-  "mini.visits": { "branch": "main", "commit": "46e7a4074032d0340308c3379bc3650626c85da8" },
   "nvim-dap": { "branch": "master", "commit": "7aade9e99bef5f0735cf966e715b3ce45515d786" },
   "nvim-dap-virtual-text": { "branch": "master", "commit": "df66808cd78b5a97576bbaeee95ed5ca385a9750" },
   "nvim-lspconfig": { "branch": "master", "commit": "ff6471d4f837354d8257dfa326b031dd8858b16e" },

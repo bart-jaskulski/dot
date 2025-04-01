@@ -1,7 +1,7 @@
 return {
   {
     'ms-jpq/coq_nvim',
-    -- enabled = false,
+    enabled = false,
     event = "InsertEnter",
     branch = 'coq',
     build = ':COQdeps',

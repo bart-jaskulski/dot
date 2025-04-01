@@ -72,7 +72,7 @@ vim.keymap.set('n', '<leader>x', '<cmd>q<cr>', { desc = 'Close buffer' })
 vim.keymap.set("n", "n", "nzzzv", { desc = "Fwd  search '/' or '?'" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Back search '/' or '?'" })
 
-vim.cmd([[inoremap <script><silent><nowait><expr> <Tab> pumvisible() ? "\<C-y>" : codeium#Accept()]])
+-- vim.cmd([[inoremap <script><silent><nowait><expr> <Tab> pumvisible() ? "\<C-y>" : codeium#Accept()]])
 
 -- Open explorer in cwd
 vim.keymap.set('n', '<leader><TAB>', ':Lexplore %:p:h<CR>', { noremap = true, silent = true })

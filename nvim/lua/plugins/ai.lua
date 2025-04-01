@@ -9,13 +9,13 @@ return {
     opts = {
       strategies = {
         chat = {
-          adapter = "anthropic",
+          adapter = "gemini",
         },
         inline = {
-          adapter = "anthropic_haiku",
+          adapter = "gemini",
         },
         agent = {
-          adapter = "anthropic",
+          adapter = "gemini",
         },
       },
       display = {

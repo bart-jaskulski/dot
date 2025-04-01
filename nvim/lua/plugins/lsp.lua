@@ -26,6 +26,12 @@ return {
               [vim.diagnostic.severity.HINT] = "",
               [vim.diagnostic.severity.INFO] = "",
             },
+            numhl = {
+              [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+              [vim.diagnostic.severity.WARN] = "WarningMsg",
+              [vim.diagnostic.severity.HINT] = "DiagnosticHint",
+              [vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+            },
           },
         },
         inlay_hints = {
@@ -95,16 +101,6 @@ return {
               },
             },
           },
-          sqls = {
-            settings = {
-              sqls = {
-                connections = {
-                  driver = 'mysql',
-                  dataSourceName = 'db:pass@tcp(localhost:3306)/collector'
-                },
-              }
-            }
-          },
           phpactor = {
             cmd = { "/home/bjaskulski/Repos/github.com/phpactor/phpactor/build/phpactor.phar", "language-server" },
           },
@@ -160,13 +156,13 @@ return {
       vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
       local servers = opts.servers
-      local has_blink, blink = pcall(require, "blink.cmp")
+      -- local has_blink, blink = pcall(require, "blink.cmp")
       local has_coq, coq = pcall(require, "coq")
       local capabilities = vim.tbl_deep_extend(
         "force",
         {},
         vim.lsp.protocol.make_client_capabilities(),
-        has_blink and blink.get_lsp_capabilities() or {},
+        -- has_blink and blink.get_lsp_capabilities() or {},
         has_coq and coq.lsp_ensure_capabilities() or {},
         opts.capabilities or {}
       )
@@ -215,7 +211,7 @@ return {
 
       if have_mason then
         mlsp.setup({
-          ensure_installed = ensure_installed,
+          -- ensure_installed = ensure_installed,
           -- LazyVim.opts("mason-lspconfig.nvim").ensure_installed or {}
           handlers = { setup },
         })
@@ -227,15 +223,13 @@ return {
   {
     "williamboman/mason.nvim",
     cmd = "Mason",
+    -- version = "1.10.0",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
-    opts_extend = { "ensure_installed" },
-    opts = {
-      ensure_installed = {
-        "stylua",
-        "shfmt",
-      },
-    },
-    config = true,
+    -- opts_extend = { "ensure_installed" },
+    opts = true
+    -- opts = {
+    --   ensure_installed = {},
+    -- }
   },
 }

@@ -7,8 +7,7 @@ return {
       },
     },
     opts = function()
-      local php_dap = require 'mason-registry'.get_package('php-debug-adapter'):get_install_path() ..
-      '/extension/out/phpDebug.js'
+      local php_dap = '/home/bjaskulski/.local/share/nvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js'
       return {
         adapters = {
           php = {
@@ -68,6 +67,8 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-woocommerce-bookings",
                 ['/var/www/html/wp-content/plugins/shopmagic-advanced-filters'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-advanced-filters",
+                ['/var/www/html/wp-content/plugins/shopmagic-webhooks'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-webhooks",
                 ['/var/www/html/wp-content/plugins/woocommerce-bookings'] =
                 "/home/bjaskulski/Plugins/woocommerce-bookings",
                 ['/var/www/html/wp-content/plugins/woocommerce-subscriptions'] =

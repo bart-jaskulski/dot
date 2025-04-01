@@ -51,10 +51,5 @@ return {
         { callback = autowrite, desc = 'Autowrite current session' }
       )
     end
-  },
-  {
-    'echasnovski/mini.visits',
-    opts = true
-  },
-  { 'girishji/devdocs.vim' }
+  }
 }

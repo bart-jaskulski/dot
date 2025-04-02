@@ -1,7 +1,7 @@
 [user]
   email = bjaskulski@protonmail.com
   name = Bart Jaskulski
-  signingkey = 845132DFBE314ACF
+	signingkey = /home/bjaskulski/.ssh/id_rsa.pub
 [core]
   excludesFile = ~/.gitignore
   autocrlf = input
@@ -11,7 +11,7 @@
 [interactive]
   diffFilter = delta --color-only --features=interactive
 [commit]
-  gpgsign = true
+	gpgsign = true
   # template = ~/.gitmessage
   verbose = true
 [diff]
@@ -87,3 +87,5 @@
   line-numbers = true
 [branch]
 	sort = -committerdate
+[gpg]
+	format = ssh

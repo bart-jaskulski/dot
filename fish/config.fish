@@ -17,8 +17,6 @@ set -gx LESS_TERMCAP_ue (printf '\e[0m')
 set -gx LESS_TERMCAP_us (printf '\e[1;4;31m')
 set -gx GOBIN "$HOME/.local/bin"
 
-# set -gx DISPLAY :0
-
 set -gx NT_ROOT "/home/bjaskulski/Repos/github.com/bart-jaskulski/me/notes"
 
 set -gx ATAC_KEY_BINDINGS "/home/bjaskulski/.config/atac/keybinds.toml"
@@ -38,8 +36,6 @@ fish_add_path "$HOME/bin"
 fish_add_path "$HOME/.cargo/bin"
 fish_add_path "$HOME/.npm-global/bin"
 fish_add_path "$HOME/Repos/github.com/pyenv/pyenv/bin"
-
-status --is-interactive; and pyenv init - | source
 
 set -gx REPOS "$HOME/Repos"
 set -gx CDPATH . "$REPOS/gitlab.wpdesk.dev" . "$REPOS/github.com/bart-jaskulski" . "$REPOS/github.com" . "$REPOS"

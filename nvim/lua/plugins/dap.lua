@@ -1,11 +1,6 @@
 return {
   {
     'mfussenegger/nvim-dap',
-    dependencies = {
-      {
-        'theHamsta/nvim-dap-virtual-text',
-      },
-    },
     opts = function()
       local php_dap = '/home/bjaskulski/.local/share/nvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js'
       return {
@@ -50,6 +45,8 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-stock-management",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-payment-retry'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-payment-retry",
+                ['/var/www/html/wp-content/plugins/flexible-shipping'] =
+                "/home/bjaskulski/full-gitlab/wpdesk/flexible-shipping",
                 -- ['/var/www/html/wp-content/plugins/flexible-wishlist'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-wishlist",
                 ['/var/www/html/wp-content/plugins/flexible-wishlist-analytics'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-wishlist-analytics",
@@ -65,6 +62,8 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-manual-actions",
                 ['/var/www/html/wp-content/plugins/shopmagic-woocommerce-bookings'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-woocommerce-bookings",
+                ['/var/www/html/wp-content/plugins/shopmagic-woocommerce-subscriptions'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-woocommerce-subscriptions",
                 ['/var/www/html/wp-content/plugins/shopmagic-advanced-filters'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-advanced-filters",
                 ['/var/www/html/wp-content/plugins/shopmagic-webhooks'] =
@@ -85,7 +84,8 @@ return {
                 ['/var/www/html/wp-content/plugins/woocommerce-wfirma'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-wfirma",
                 ['/var/www/html/wp-content/plugins/flexible-checkout-fields'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-checkout-fields",
                 ['/var/www/html/wp-content/plugins/paczka'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-paczka-w-ruchu",
-                ['/var/www/html/wp-content/plugins/flexible-invoices-woocommerce'] = "/home/bjaskulski/Repos/full-gitlab/wpdesk/heroes/flexible-invoices-woocommerce",
+                ['/var/www/html/wp-content/plugins/flexible-invoices-woocommerce'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-invoices-woocommerce",
+                ['/var/www/html/wp-content/plugins/flexible-invoices'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-invoices-woocommerce",
                 ['/var/www/html/wp-content/plugins/woocommerce-gateway-przelewy24'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-przelewy24",
                 ['/var/www/html/wp-content/plugins/woocommerce-flexible-pricing'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-flexible-pricing",
               },

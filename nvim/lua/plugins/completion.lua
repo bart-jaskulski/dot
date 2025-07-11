@@ -30,5 +30,10 @@ return {
     --   },
     -- },
     -- opts_extend = { "sources.default" }
+  },
+  {
+    "supermaven-inc/supermaven-nvim",
+    opts = true,
+    event = "InsertEnter",
   }
 }

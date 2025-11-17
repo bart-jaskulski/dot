@@ -1,0 +1,62 @@
+#!/bin/sh
+# Screenshot script: Click for full screen, Drag for selection.
+# Saves to /tmp and copies to clipboard.
+
+# Theme colors for slurp (optional, makes slurp match)
+BG_COLOR=#1a1b26
+ACCENT_COLOR=#ffb86c
+BORDER_WIDTH=2
+
+# Temporary file path
+TMP_FILE="/tmp/screenshot_$(date +%s).png"
+
+# Notification function
+notify() {
+    # Check if args are passed, otherwise read from stdin (for errors)
+    if [ $# -gt 0 ]; then
+        notify-send "Screenshot" "$1" -i camera-photo-symbolic -t 3000
+    else
+        notify-send "Screenshot Error" "$(cat -)" -i dialog-error-symbolic -t 5000
+    fi
+}
+
+# Run slurp to select region or detect click
+# The `-d` flag allows wofi/bemenu to draw over the selection overlay
+# `-b` background, `-c` border color, `-w` border width
+if ! geometry=$(slurp -d -b "${BG_COLOR}BF" -c "$ACCENT_COLOR" -w "$BORDER_WIDTH"); then
+    # Exit code is non-zero (e.g., Esc pressed)
+    notify "Screenshot cancelled."
+    exit 1
+fi
+
+# Check if the selection area is very small (likely a click)
+# Slurp returns WxH format like 1920x1080
+width=$(echo "$geometry" | cut -d' ' -f2 | cut -dx -f1)
+height=$(echo "$geometry" | cut -d' ' -f2 | cut -dx -f2)
+
+# Threshold for click detection (adjust if needed)
+CLICK_THRESHOLD=5
+
+if [ "$width" -le "$CLICK_THRESHOLD" ] || [ "$height" -le "$CLICK_THRESHOLD" ]; then
+    # Small selection detected, assume click -> capture screen
+    grim "$TMP_FILE"
+    if [ $? -eq 0 ]; then
+        wl-copy < "$TMP_FILE"
+        notify "Screen captured to clipboard & $TMP_FILE"
+    else
+        notify < "Failed to capture screen."
+        exit 1
+    fi
+else
+    # Normal selection -> capture region
+    grim -g "$geometry" "$TMP_FILE"
+    if [ $? -eq 0 ]; then
+        wl-copy < "$TMP_FILE"
+        notify "Selection captured to clipboard & $TMP_FILE"
+    else
+        notify < "Failed to capture selection."
+        exit 1
+    fi
+fi
+
+exit 0

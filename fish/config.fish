@@ -3,7 +3,7 @@ set -U fish_greeting
 set -gx GPG_TTY (tty)
 set -gx CLICOLOR 1
 set -gx LSCOLORS ExFxBxDxCxegedabagacad
-set -gx TERM xterm-256color
+#set -gx TERM xterm-256color
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 set -gx BROWSER lynx
@@ -50,7 +50,7 @@ if status is-interactive
   end
 
   if test (tty) = "/dev/tty1"; and not set -q DISPLAY; and not set -q WAYLAND_DISPLAY
-    exec river -no-xwayland
+    dbus-launch --exit-with-session river -no-xwayland
   end
 
   abbr -a tm tmux
@@ -76,7 +76,11 @@ if status is-interactive
     setxkbmap -option caps:shiftlock
   end
 
-  fnm env --use-on-cd --shell fish | source
+  # fnm env --use-on-cd --shell fish | source
 
   envx ~/.env
 end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH

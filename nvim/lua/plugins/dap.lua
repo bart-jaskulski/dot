@@ -43,6 +43,10 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-recurring-shipping",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-stock-management'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-stock-management",
+                ['/var/www/html/wp-content/plugins/custom-price-for-woocommerce'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/custom-price-for-woocommerce",
+                ['/var/www/html/wp-content/plugins/flexible-subscriptions-one-time-payment'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-one-time-payment",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-payment-retry'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-payment-retry",
                 ['/var/www/html/wp-content/plugins/flexible-shipping'] =
@@ -87,6 +91,7 @@ return {
                 ['/var/www/html/wp-content/plugins/flexible-invoices-woocommerce'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-invoices-woocommerce",
                 ['/var/www/html/wp-content/plugins/flexible-invoices'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-invoices-woocommerce",
                 ['/var/www/html/wp-content/plugins/woocommerce-gateway-przelewy24'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-gateway-przelewy24",
+                ['/var/www/html/wp-content/plugins/n8n-chat-widget'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/n8n-chat-widget",
                 ['/var/www/html/wp-content/plugins/woocommerce-flexible-pricing'] = "/home/bjaskulski/Repos/gitlab.wpdesk.dev/woocommerce-flexible-pricing",
               },
               stopOnEntry = false,

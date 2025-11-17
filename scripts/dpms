@@ -1,0 +1,16 @@
+#!/bin/sh
+
+case "$1" in
+    on)
+        wlr-randr --output HDMI-A-2 --on --pos 1920,0 --transform 90 --output HDMI-A-1 --pos 0,0 --preferred --on
+        ;;
+    off)
+        wlr-randr --output HDMI-A-2 --off # --output HDMI-A-1 --off
+        ;;
+    *)
+        echo "Usage: $0 [on|off]"
+        exit 1
+        ;;
+esac
+
+exit 0

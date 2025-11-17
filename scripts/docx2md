@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Exit immediately on error
+set -e
+
+# Check for input file argument
+if [ $# -eq 0 ]; then
+  echo "Usage: docx2md <filename.docx>" >&2
+  exit 1
+fi
+
+# Define input and output filenames
+input_file="$1"
+output_file="${input_file%.docx}.md"
+
+# Run the conversion
+pandoc \
+  -f docx \
+  -t markdown_strict \
+  "$input_file" \
+  -o "$output_file"

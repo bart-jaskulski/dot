@@ -1,40 +1,254 @@
 #!/bin/bash
 
-# Function to concatenate files recursively
-concatenate_files() {
-    local dir="$1"
-    local output_file="$2"
+# --- Configuration ---
+DEFAULT_OUTPUT_FILE="output.xml"
+# Set to true to attempt to skip binary files, false to include all files
+SKIP_BINARY_FILES=true
+# ---
 
-    # Iterate over files and directories in the current directory
-    for entry in "$dir"/*; do
-        if [ -d "$entry" ]; then
-            # If it's a directory, call the function recursively
-            concatenate_files "$entry" "$output_file"
-        elif [ -f "$entry" ]; then
-            # If it's a file, append it to the output file
-            {
-              echo "-------------------------------------------------"
-              echo "$entry"
-              echo "-------------------------------------------------"
-              cat "$entry"
-            } >> "$output_file"
-        fi
-    done
+# --- Helper Functions ---
+
+# Function to escape XML special characters for attribute values
+xml_escape_attr() {
+    local s="$1"; s="${s//&/&amp;}"; s="${s//</&lt;}"; s="${s//>/&gt;}"; s="${s//\"/&quot;}"; s="${s//\'/&apos;}"; echo "$s"
 }
 
-# Check if the directory argument is provided
-if [ -z "$1" ]; then
-    echo "Usage: $0 <directory> [output_file]"
-    exit 1
+# Function to check for and get realpath command (handles macOS brew coreutils)
+get_realpath_cmd() {
+    if command -v realpath &> /dev/null; then echo "realpath";
+    elif command -v grealpath &> /dev/null; then echo "grealpath"; # Homebrew coreutils on macOS
+    else echo ""; fi
+}
+
+# Function to check if a path matches any exclusion pattern
+# Takes the path relative to project root and the exclude_patterns array name/elements
+# Returns 0 (success/excluded) if excluded, 1 (failure/not excluded) otherwise
+check_exclusions() {
+    local path_to_check="$1"
+    local is_excluded=false
+    local pattern # Keep track of the matching pattern for the message
+
+    # Define patterns array based on Bash version (nameref vs expansion)
+    local -a patterns_local
+    local use_nameref=false
+    if declare -N exclude_patterns_ref &>/dev/null && [[ "${BASH_VERSION%.*}" > "4.2" ]]; then # Nameref needs 4.3+
+        declare -n exclude_patterns_ref="$2"
+        patterns_local=("${exclude_patterns_ref[@]}") # Copy for iteration if needed, or iterate ref directly
+        use_nameref=true
+    else
+        shift # Shift off path_to_check
+        patterns_local=("$@") # Store remaining args as patterns
+    fi
+
+    for pattern in "${patterns_local[@]}"; do
+        local is_simple_name=true # Assume simple name unless proven otherwise
+        [[ "$pattern" == */* ]] && is_simple_name=false # Contains internal /
+        case "$pattern" in *[\*\?\[]*) is_simple_name=false ;; esac # Contains wildcard
+
+        # Check pattern types
+        if [[ "$pattern" == '*.'* && "$pattern" != *"/"* ]]; then
+            # Suffix pattern like *.log
+            local suffix="${pattern#\*}"
+            if [[ "$path_to_check" == *"$suffix" ]]; then
+                is_excluded=true; break
+            fi
+        elif [[ "$pattern" == */ ]]; then
+            # Directory prefix pattern like build/
+            if [[ "$path_to_check" == "$pattern"* ]]; then
+                is_excluded=true; break
+            fi
+        elif $is_simple_name; then
+            # Simple name like 'tests' or 'README.md' - matches exact file or dir prefix
+             if [[ "$path_to_check" == "$pattern" || "$path_to_check" == "$pattern/"* ]]; then
+                 is_excluded=true; break
+             fi
+        else
+            # Other glob pattern like src/*.js or file[1-9].txt
+            if [[ "$path_to_check" == $pattern ]]; then
+                is_excluded=true; break
+            fi
+        fi
+    done
+
+
+    if $is_excluded; then
+        echo "    Excluding file matching pattern '$pattern': $path_to_check" >&2
+        return 0 # Excluded
+    else
+        return 1 # Not excluded
+    fi
+}
+
+
+# Function to process a single file: check binary, generate XML fragment
+process_file() {
+    local absolute_filepath="$1"
+    local path_relative_to_root="$2"
+    local output_file="$3"
+
+    # Optional: Skip binary files
+    if [ "$SKIP_BINARY_FILES" = true ]; then
+        local mime_type
+        if ! mime_type=$(file -b --mime-type "$absolute_filepath" 2>/dev/null); then
+             echo "    Skipping file due to error reading type: $absolute_filepath" >&2; return
+        fi
+        if [[ ! "$mime_type" =~ ^text/ && ! "$mime_type" =~ /xml$ && ! "$mime_type" =~ /json$ && "$mime_type" != "inode/x-empty" ]]; then
+            echo "    Skipping non-text file: $path_relative_to_root ($mime_type)" >&2; return
+        fi
+    fi
+
+    path_relative_to_root_escaped=$(xml_escape_attr "$path_relative_to_root")
+    echo "    Adding file: $path_relative_to_root"
+    echo "    <file path=\"$path_relative_to_root_escaped\">" >> "$output_file"
+    echo "      <![CDATA[" >> "$output_file"
+    if ! cat "$absolute_filepath" >> "$output_file"; then
+         echo "Warning: Could not read file '$absolute_filepath'. Content might be incomplete." >&2
+         echo " FAILED_TO_READ_FILE " >> "$output_file"
+    fi
+    echo "" >> "$output_file"; echo "      ]]>" >> "$output_file"; echo "    </file>" >> "$output_file"
+}
+
+# --- Main Script ---
+
+# Parse command line arguments
+input_dirs=()
+exclude_patterns=()
+output_file="$DEFAULT_OUTPUT_FILE"
+
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -o|--output) if [[ -z "$2" || "$2" == -* ]]; then echo "Error: Output file argument missing after $1" >&2; exit 1; fi; output_file="$2"; shift 2 ;;
+        -x|--exclude) if [[ -z "$2" || "$2" == -* ]]; then echo "Error: Exclude pattern argument missing after $1" >&2; exit 1; fi; exclude_patterns+=("$2"); shift 2 ;;
+        -h|--help)
+        echo "Usage: $0 [-o output.xml] [-x exclude_pattern]... [--include-binary] [directory...]"
+        echo "Concatenates files from specified directories (default: '.') into a single XML file."
+        echo "Project root is Git repo root (if applicable) or PWD. Paths relative to root."
+        echo "Respects .gitignore (if Git). Applies command-line exclusions. Excludes output file."
+        echo
+        echo "Arguments:"
+        echo "  [directory...]      One or more source directories. Defaults to '.' if none provided."
+        echo
+        echo "Options:"
+        echo "  -o, --output FILE   Specify output XML file (default: $DEFAULT_OUTPUT_FILE)"
+        echo "  -x, --exclude PATTERN Add a glob pattern to exclude files/directories."
+        echo "                      Can be used multiple times. Uses Bash globbing relative to project root."
+        echo "                      '*.ext' matches suffixes recursively."
+        echo "                      'dir/' matches directory prefix recursively."
+        echo "                      'name' matches file 'name' or directory 'name/' recursively."
+        echo "                      Other patterns use standard globbing (e.g., 'src/*.js')."
+        echo "  --include-binary    Include all files (don't skip binary/non-text files)"
+        echo "  -h, --help          Show this help message"
+        exit 0
+        ;;
+        --include-binary) SKIP_BINARY_FILES=false; shift ;;
+        -*) echo "Unknown option: $1" >&2; echo "Use -h or --help for usage." >&2; exit 1 ;;
+        *) input_dirs+=("$1"); shift ;;
+    esac
+done
+
+# --- Default to current directory if none specified ---
+if [ ${#input_dirs[@]} -eq 0 ]; then
+    echo "Info: No input directories specified, defaulting to '.'" >&2
+    input_dirs+=(".")
 fi
 
-# Set the output file name
-output_file="${2:-output.md}"
+# --- Determine Project Root and Name ---
+project_root=""; project_name=""; is_git_repo=false
+if command -v git &> /dev/null && git -C "$PWD" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    if ! project_root=$(git -C "$PWD" rev-parse --show-toplevel); then echo "Error: Failed to get Git repository root. Aborting." >&2; exit 1; fi
+    is_git_repo=true; project_name=$(basename "$project_root"); echo "Detected Git repository. Project root: $project_root"
+else
+    project_root="$PWD"; project_name=$(basename "$project_root"); echo "Not inside a Git repository (or git command unavailable)."; echo "Using current directory as project root: $project_root"
+    if ! command -v git &> /dev/null; then echo "Warning: 'git' command not found. Cannot check or use .gitignore." >&2; fi
+fi
+project_name_escaped=$(xml_escape_attr "$project_name")
 
-# Create an empty output file
-: > "$output_file"
+# --- Get Absolute Path of Output File ---
+realpath_cmd=$(get_realpath_cmd); absolute_output_file=""
+if [[ -n "$realpath_cmd" ]]; then
+    if ! absolute_output_file=$("$realpath_cmd" -m "$output_file" 2>/dev/null); then echo "Warning: Could not reliably determine absolute path for output file '$output_file'. Exclusion might fail." >&2; absolute_output_file="$project_root/$output_file"; fi
+else
+    echo "Warning: 'realpath' command not found. Path handling and output file exclusion may be unreliable." >&2
+    if [[ "$output_file" == /* ]]; then absolute_output_file="$output_file"; else absolute_output_file="$project_root/$output_file"; fi
+fi
+if [[ -n "$realpath_cmd" ]]; then absolute_output_file=$($realpath_cmd -m "$absolute_output_file"); fi
+echo "Output file target (absolute): $absolute_output_file"
 
-# Call the concatenate_files function with the provided directory
-concatenate_files "$1" "$output_file"
+# --- Get Absolute Paths of Input Directories ---
+absolute_input_dirs=(); has_invalid_input=false
+for dir in "${input_dirs[@]}"; do
+    abs_dir="";
+    if [[ -n "$realpath_cmd" ]]; then
+        if ! abs_dir=$("$realpath_cmd" -e "$dir" 2>/dev/null); then echo "Error: Input directory '$dir' not found or inaccessible." >&2; has_invalid_input=true; fi
+    else
+        local temp_abs_dir; if [[ "$dir" == /* ]]; then temp_abs_dir="$dir"; else temp_abs_dir="$PWD/$dir"; fi
+        if [ ! -d "$temp_abs_dir" ]; then echo "Error: Input directory '$dir' not found or inaccessible (realpath not found)." >&2; has_invalid_input=true
+        else if ! abs_dir=$(cd "$temp_abs_dir" && pwd); then echo "Error: Could not determine absolute path for '$dir'." >&2; has_invalid_input=true; fi; fi
+    fi
+    if [[ -n "$abs_dir" ]]; then absolute_input_dirs+=("$abs_dir"); fi
+done
+if $has_invalid_input; then echo "Aborting due to invalid input directories." >&2; exit 1; fi
+if [ ${#absolute_input_dirs[@]} -eq 0 ]; then echo "Error: No valid input directories remaining." >&2; exit 1; fi
 
-echo "Files concatenated successfully to $output_file"
+echo "Processing files from:"; for abs_dir in "${absolute_input_dirs[@]}"; do echo "  - $abs_dir"; done
+if [ ${#exclude_patterns[@]} -gt 0 ]; then
+    echo "Applying command-line exclusion patterns:"; for pattern in "${exclude_patterns[@]}"; do echo "  - $pattern"; done
+fi
+
+# --- Process Files ---
+echo '<?xml version="1.0" encoding="UTF-8"?>' > "$output_file"
+echo "<project name=\"$project_name_escaped\">" >> "$output_file"
+echo "  <files>" >> "$output_file"
+processed_file_count=0
+
+# Determine how to pass exclude_patterns to check_exclusions based on Bash version
+exclude_arg="exclude_patterns" # Pass by name if possible
+if ! declare -N exclude_patterns_ref &>/dev/null || [[ "${BASH_VERSION%.*}" < "4.3" ]]; then
+    exclude_arg=("${exclude_patterns[@]}") # Expand if nameref not supported
+fi
+
+
+if $is_git_repo; then
+    echo "Scanning Git repository for files (using git ls-files, respecting .gitignore)..."
+    git -C "$project_root" ls-files -c -o --exclude-standard -z | while IFS= read -r -d $'\0' path_relative_to_root; do
+        absolute_filepath="$project_root/$path_relative_to_root"
+        if [[ "$absolute_filepath" == "$absolute_output_file" ]]; then continue; fi
+
+        include_file=false
+        for input_root in "${absolute_input_dirs[@]}"; do if [[ "$absolute_filepath" == "$input_root/"* || "$absolute_filepath" == "$input_root" ]]; then if [ -f "$absolute_filepath" ]; then include_file=true; break; fi; fi; done
+        if ! $include_file; then continue; fi
+
+        # Apply command-line exclusion patterns using the helper function
+        if check_exclusions "$path_relative_to_root" "${exclude_arg[@]}"; then continue; fi
+
+        process_file "$absolute_filepath" "$path_relative_to_root" "$output_file"; ((processed_file_count++))
+    done
+else
+    echo "Scanning specified directories using 'find'..."
+    if [[ -z "$realpath_cmd" ]]; then echo "Warning: Using 'find' without 'realpath'. Relative path calculations might be inaccurate." >&2; fi
+    declare -A processed_files_map
+    for input_root in "${absolute_input_dirs[@]}"; do
+        echo "  Scanning under: $input_root"
+        find "$input_root" -type f -print0 | while IFS= read -r -d $'\0' absolute_filepath; do
+            if [[ "$absolute_filepath" == "$absolute_output_file" ]]; then continue; fi
+            if declare -A processed_files_map 2>/dev/null && [[ -v processed_files_map["$absolute_filepath"] ]]; then continue; fi
+            processed_files_map["$absolute_filepath"]=1
+
+            path_relative_to_root=""
+            if [[ -n "$realpath_cmd" ]]; then path_relative_to_root=$("$realpath_cmd" --relative-to="$project_root" "$absolute_filepath");
+            else local root_prefix="${project_root%/}/"; path_relative_to_root=${absolute_filepath#$root_prefix}; if [[ "$path_relative_to_root" == "$absolute_filepath" ]]; then if [[ "$absolute_filepath" == "$project_root/"* ]]; then path_relative_to_root=$(basename "$absolute_filepath"); else echo "Warning: Could not determine relative path for $absolute_filepath from $project_root" >&2; path_relative_to_root="UNKNOWN_PATH/$(basename "$absolute_filepath")"; fi; fi; fi
+
+            # Apply command-line exclusion patterns using the helper function
+             if check_exclusions "$path_relative_to_root" "${exclude_arg[@]}"; then continue; fi
+
+            process_file "$absolute_filepath" "$path_relative_to_root" "$output_file"; ((processed_file_count++))
+        done
+    done
+fi
+
+echo "  </files>" >> "$output_file"; echo "</project>" >> "$output_file"
+echo "-------------------------------------------------"; echo "File processing complete. Processed $processed_file_count files."; echo "Output saved to $output_file"
+if [ "$SKIP_BINARY_FILES" = true ]; then echo "(Non-text files were skipped unless --include-binary was used)"; fi
+echo "-------------------------------------------------"
+exit 0

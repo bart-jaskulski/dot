@@ -11,3 +11,15 @@ Session.vim
 .aider*
 .ddev
 wp-config-ddev.php
+
+HEAD
+ORIG_HEAD
+commondir
+gitdir
+index
+index.lock
+AUTO_MERGE
+COMMIT_EDITMSG
+FETCH_HEAD
+
+repomix-output.xml

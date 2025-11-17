@@ -15,8 +15,13 @@
   # template = ~/.gitmessage
   verbose = true
 [diff]
+  tool = vimdiff
   algorithm = histogram
   colorMoved = default
+[difftool "vimdiff"]
+  cmd = vim -d -o \"$LOCAL\" \"$REMOTE\"
+[difftool]
+  prompt = false
 [color]
   ui = auto
 [color "branch"]

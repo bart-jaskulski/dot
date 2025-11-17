@@ -31,11 +31,11 @@ vim.opt.laststatus = 2 -- Display status line only for the last window
 vim.opt.lazyredraw = true -- don't redraw while executing macros
 vim.opt.linebreak = true
 vim.opt.mouse='a'
-vim.opt.number = true
+vim.opt.number = false
 vim.opt.path:prepend { 'src/**', 'assets/**' }
 vim.opt.pumblend=10
 vim.opt.pumheight=10
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.scrolloff=8
 vim.opt.sessionoptions:remove { 'blank', 'buffers', 'folds', 'help', 'terminal' }
 vim.opt.shiftwidth = 2
@@ -66,6 +66,7 @@ vim.opt.textwidth=100
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen=100
 vim.opt.ttyfast = true -- faster scrolling
+vim.opt.undofile = true
 vim.opt.updatetime = 200 -- Save swap file and trigger CursorHold
 vim.opt.wildmenu = true -- better command-line completion
 vim.opt.wildmode='longest:full'
@@ -116,3 +117,4 @@ vim.g.netrw_sizestyle = "H"
 -- Highlight link
 vim.cmd('hi! link netrwMarkFile Search')
 
+vim.cmd.colorscheme('alabaster')

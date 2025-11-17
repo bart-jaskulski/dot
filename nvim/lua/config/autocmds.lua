@@ -15,6 +15,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
   group = augroup("resize_splits"),
   callback = function()
     vim.cmd("tabdo wincmd =")
+    vim.cmd("tabdo wincmd _")
   end,
 })
 

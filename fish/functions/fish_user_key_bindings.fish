@@ -2,14 +2,16 @@ function fish_user_key_bindings
   fish_default_key_bindings -M
   #
   # # Vi mode
-  # fish_vi_key_bindings --no-erase
+  fish_vi_key_bindings
   #
 
-  bind \ek up-or-search
-  bind \ej down-or-search
+  bind alt-k -M insert up-or-search
+  bind alt-j -M insert down-or-search
 
-  bind \ef accept-autosuggestion
-  bind \el complete
+  bind alt-f -M insert accept-autosuggestion
+  bind alt-l complete
+
+  # bind tab -M insert fzf_smart_triggers
 
   # fzf --fish | source
   # Ctrl+R for history search using fzf

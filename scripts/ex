@@ -1,0 +1,77 @@
+#!/bin/sh
+
+# shell command helper powered by mods
+
+if ! command -v mods >/dev/null 2>&1; then
+    printf '%s\n' "ex: mods command not available" >&2
+    exit 127
+fi
+
+if [ $# -eq 0 ]; then
+    printf '%s\n' "Usage: ex <describe the command you need>" >&2
+    exit 2
+fi
+
+prompt="$*"
+
+ai_response="$(mods -q -s "$prompt" 2>/dev/null)"
+status_code=$?
+
+if [ "$status_code" -ne 0 ]; then
+    ai_response="$(mods -q -R shell -t "$prompt" "$prompt")"
+    status_code=$?
+fi
+
+if [ "$status_code" -ne 0 ]; then
+    printf '%s\n' "ex: unable to produce a command" >&2
+    exit "$status_code"
+fi
+
+while :; do
+    if [ -t 1 ]; then
+        printf '\033[1m%s\033[0m\n' "$ai_response"
+    else
+        printf '%s\n' "$ai_response"
+    fi
+    printf '%s' "Run this command? [y/N/r/q] "
+    if ! IFS= read -r confirm; then
+        printf '\n' >&2
+        mods -q -d "$prompt" 2>/dev/null
+        exit 1
+    fi
+
+    case "$confirm" in
+        y|Y|yes|Yes|YES)
+            eval "$ai_response"
+            exit $?
+            ;;
+        r|R|refine|Refine|REFINE)
+            printf '%s' "How should I refine this command? "
+            if ! IFS= read -r refinement; then
+                printf '\n' >&2
+                mods -q -d "$prompt" 2>/dev/null
+                exit 1
+            fi
+
+            if [ -z "$refinement" ]; then
+                printf '%s\n' "No refinement provided."
+                continue
+            fi
+
+            ai_response="$(mods -q -c "$prompt" "$refinement")"
+            status_code=$?
+
+            if [ "$status_code" -ne 0 ]; then
+                printf '%s\n' "ex: failed to refine command" >&2
+                exit "$status_code"
+            fi
+            ;;
+        q|Q|quit|Quit|QUIT)
+            exit 0
+            ;;
+        *)
+            mods -q -d "$prompt" 2>/dev/null
+            exit 1
+            ;;
+    esac
+done

@@ -23,7 +23,6 @@
   "language_server_completion.trim_leading_dollar": true,
   "language_server.diagnostics_on_update": false,
   "language_server_phpstan.tmp_file_disabled": true,
-  "worse_reflection.phpdoc_parser": "phpstan",
   "worse_reflection.cache_lifetime": 10,
   "language_server.diagnostic_exclude_paths": [
      "vendor/**/*",

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Default to zone0 if THERMAL_ZONE is not set
+: "${THERMAL_ZONE:=0}"
+
+while true; do
+    if [ -f "/sys/class/thermal/thermal_zone${THERMAL_ZONE}/temp" ]; then
+        # Read temperature in millidegrees
+        temp=$(cat "/sys/class/thermal/thermal_zone${THERMAL_ZONE}/temp")
+        # Convert millidegrees to degrees with 2 decimal places
+        # First divide by 10 to keep 2 decimals
+        temp_dec=$(( temp / 10 ))
+        # Format as XX.YY by inserting decimal point before last 2 digits
+        whole=$(( temp_dec / 100 ))
+        decimal=$(( temp_dec % 100 ))
+        # Ensure decimal part is always 2 digits
+        if [ "$decimal" -lt 10 ]; then
+            decimal="0${decimal}"
+        fi
+        echo "temperature|float|${whole}.${decimal}"
+        echo
+    else
+        echo "Failed to read temperature from zone${THERMAL_ZONE}" >&2
+    fi
+    sleep 3
+done

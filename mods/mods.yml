@@ -61,11 +61,29 @@ apis:
     base-url: https://api.openai.com/v1
     api-key:
     api-key-env: OPENAI_API_KEY
-    models:
-      gpt-4:
-        aliases: ["4"]
-        max-input-chars: 24500
-        fallback: gpt-3.5-turbo
+    # api-key-cmd: rbw get -f OPENAI_API_KEY chat.openai.com
+    models: # https://platform.openai.com/docs/models
+      gpt-4o-mini:
+        aliases: ["4o-mini"]
+        max-input-chars: 392000
+        fallback: gpt-4o
+      # GPT-5 Series (Current Flagship)
+      gpt-5:
+        aliases: ["5", "gpt5", "gpt-5-thinking", "gpt5-thinking"]
+        max-input-chars: 794000
+        fallback: gpt-4o
+      gpt-5-mini:
+        aliases: ["5mini", "gpt5mini"]
+        max-input-chars: 400000
+        fallback: gpt-5
+      gpt-5-nano:
+        aliases: ["5nano", "gpt5nano"]
+        max-input-chars: 200000
+        fallback: gpt-5-mini
+      gpt-5-codex:
+        aliases: ["5codex", "gpt5codex", "codex"]
+        max-input-chars: 400000
+        fallback: gpt-5
   groq:
     base-url: https://api.groq.com/openai/v1
     api-key-env: GROQ_API_KEY

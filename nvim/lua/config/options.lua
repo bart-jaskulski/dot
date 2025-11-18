@@ -73,7 +73,7 @@ vim.opt.wildmode='longest:full'
 vim.opt.winblend=10
 vim.opt.wrapscan = true -- wrap around when searching
 
-if os.getenv('DISPLAY') ~= nil then
+-- if os.getenv('DISPLAY') ~= nil then
   vim.opt.termguicolors = true
   vim.opt.background = 'light'
   -- better ascii friendly listchars
@@ -82,10 +82,10 @@ if os.getenv('DISPLAY') ~= nil then
     extends = '…', precedes = '…', nbsp = '␣'
   }
   vim.opt.list = true -- display hidden chars only in TTY
-else
-  vim.opt.background = 'dark'
-  vim.opt.cursorline = false
-end
+-- else
+--   vim.opt.background = 'dark'
+--   vim.opt.cursorline = false
+-- end
 
 -- Use ripgrep for searching
 if vim.fn.executable('rg') == 1 then

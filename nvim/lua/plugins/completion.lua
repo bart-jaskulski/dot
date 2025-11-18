@@ -6,34 +6,57 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {},
-    -- opts = {
-    --   -- 'default' for mappings similar to built-in completion
-    --   -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-    --   -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-    --   -- See the full "keymap" documentation for information on defining your own keymap.
-    --   keymap = { preset = 'default' },
-    --
-    --   appearance = {
-    --     -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-    --     -- Useful for when your theme doesn't support blink.cmp
-    --     -- Will be removed in a future release
-    --     use_nvim_cmp_as_default = true,
-    --     -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-    --     -- Adjusts spacing to ensure icons are aligned
-    --     nerd_font_variant = 'mono'
-    --   },
-    --
-    --   -- Default list of enabled providers defined so that you can extend it
-    --   -- elsewhere in your config, without redefining it, due to `opts_extend`
-    --   sources = {
-    --     default = { 'lsp', 'path', 'snippets', 'buffer' }
-    --   },
-    -- },
-    -- opts_extend = { "sources.default" }
   },
   {
     "supermaven-inc/supermaven-nvim",
     opts = true,
     event = "InsertEnter",
+    enabled = false,
+  },
+  {
+    "milanglacier/minuet-ai.nvim",
+    enabled = true,
+    main = "minuet",
+    opts = {
+      virtualtext = {
+        auto_trigger_ft = { '*' },
+        auto_trigger_ignore_ft = { 'markdown', 'gitcommit' },
+        keymap = {
+          -- accept whole completion
+          accept = '<Tab>',
+          -- accept one line
+          accept_line = nil,
+          -- accept n lines (prompts for number)
+          -- e.g. "A-z 2 CR" will accept 2 lines
+          accept_n_lines = nil,
+          -- Cycle to prev completion item, or manually invoke completion
+          prev = nil,
+          -- Cycle to next completion item, or manually invoke completion
+          next = nil,
+          dismiss = '<A-e>',
+        },
+      },
+      debounce = 250,
+      add_single_line_entry = false,
+      -- If one response is not good, neither will
+      n_completions = 1,
+      provider = "openai_fim_compatible",
+      provider_options = {
+        openai_fim_compatible = {
+          model = "mercury-coder",
+          end_point = "https://api.inceptionlabs.ai/v1/fim/completions",
+          api_key = 'MERCURY_API_KEY',
+          name = "Mercury Coder",
+          stream = true,
+          optional = {
+            max_tokens = 5000,
+          }
+        }
+      }
+    },
+    event = "InsertEnter",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
   }
 }

@@ -8,55 +8,22 @@ return {
     opts = {},
   },
   {
-    "supermaven-inc/supermaven-nvim",
-    opts = true,
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
     event = "InsertEnter",
-    enabled = false,
-  },
-  {
-    "milanglacier/minuet-ai.nvim",
-    enabled = true,
-    main = "minuet",
     opts = {
-      virtualtext = {
-        auto_trigger_ft = { '*' },
-        auto_trigger_ignore_ft = { 'markdown', 'gitcommit' },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        -- hide_during_completion = vim.g.ai_cmp,
         keymap = {
-          -- accept whole completion
-          accept = '<Tab>',
-          -- accept one line
-          accept_line = nil,
-          -- accept n lines (prompts for number)
-          -- e.g. "A-z 2 CR" will accept 2 lines
-          accept_n_lines = nil,
-          -- Cycle to prev completion item, or manually invoke completion
-          prev = nil,
-          -- Cycle to next completion item, or manually invoke completion
-          next = nil,
-          dismiss = '<A-e>',
+          accept = "<Tab>",
+          next = "<M-]>",
+          prev = "<M-[>",
         },
       },
-      debounce = 250,
-      add_single_line_entry = false,
-      -- If one response is not good, neither will
-      n_completions = 1,
-      provider = "openai_fim_compatible",
-      provider_options = {
-        openai_fim_compatible = {
-          model = "mercury-coder",
-          end_point = "https://api.inceptionlabs.ai/v1/fim/completions",
-          api_key = 'MERCURY_API_KEY',
-          name = "Mercury Coder",
-          stream = true,
-          optional = {
-            max_tokens = 5000,
-          }
-        }
-      }
+      panel = { enabled = false },
     },
-    event = "InsertEnter",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  }
+  },
 }

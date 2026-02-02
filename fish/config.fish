@@ -50,7 +50,7 @@ if status is-interactive
   end
 
   if test (tty) = "/dev/tty1"; and not set -q DISPLAY; and not set -q WAYLAND_DISPLAY
-    dbus-launch --exit-with-session river -no-xwayland
+    # dbus-launch --exit-with-session river -no-xwayland
   end
 
   abbr -a tm tmux

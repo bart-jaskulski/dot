@@ -1,0 +1,48 @@
+model = "gpt-5.2-codex"
+model_reasoning_effort = "medium"
+[features]
+skills = true
+unified_exec = true
+shell_snapshot = true
+collab = true
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["chrome-devtools-mcp@latest", "-e", "/usr/bin/chromium", "--chrome-arg", "'--ozone-platform=wayland'", "--headless", "--isolated"]
+enabled = false
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+startup_timeout_sec = 60.0
+enabled = true
+
+[mcp_servers.context7.http_headers]
+CONTEXT7_API_KEY = "$CONTEXT7_API_KEY"
+
+[mcp_servers.exa]
+url = "https://mcp.exa.ai/mcp"
+enabled = true
+
+[mcp_servers.next-devtools]
+command = "npx"
+args = ["next-devtools-mcp@latest"]
+enabled = false
+startup_timeout_sec = 60.0
+
+[model_providers.z_ai]
+# Name of the provider that will be displayed in the Codex UI.
+name = "z.ai - GLM Coding Plan"
+# The path `/chat/completions` will be amended to this URL to make the POST
+# request for the chat completions.
+base_url = "https://api.z.ai/api/coding/paas/v4"
+env_key = "Z_AI_API_KEY"
+
+[profiles.glm]
+model = "glm-4.7"
+model_provider = "z_ai"
+
+[notice]
+hide_rate_limit_model_nudge = true
+
+[sandbox_workspace_write]
+network_access = true

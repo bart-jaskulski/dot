@@ -1,6 +1,6 @@
 return {
   {
-    'echasnovski/mini.sessions',
+    'nvim-mini/mini.sessions',
     config = function()
       local MiniSessions = require'mini.sessions'
       MiniSessions.setup({ autoread = false })

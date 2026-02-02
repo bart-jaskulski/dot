@@ -70,6 +70,8 @@ return {
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-woocommerce-bookings",
                 ['/var/www/html/wp-content/plugins/shopmagic-woocommerce-subscriptions'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-woocommerce-subscriptions",
+                ['/var/www/html/wp-content/plugins/shopmagic-flexible-subscriptions'] =
+                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-flexible-subscriptions",
                 ['/var/www/html/wp-content/plugins/shopmagic-advanced-filters'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/shopmagic-advanced-filters",
                 ['/var/www/html/wp-content/plugins/shopmagic-webhooks'] =

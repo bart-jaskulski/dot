@@ -1,7 +1,7 @@
 return {
   {
     'ibhagwan/fzf-lua',
-    -- dependencies = 'echasnovski/mini.icons',
+    -- dependencies = 'nvim-mini/mini.icons',
     cmd = 'FzfLua',
     opts = {
       defaults = {
@@ -73,7 +73,7 @@ return {
     },
   },
   {
-    'echasnovski/mini.diff',
+    'nvim-mini/mini.diff',
     event = "VeryLazy",
     opts = {
       view = {
@@ -87,7 +87,7 @@ return {
     },
   },
   {
-    'echasnovski/mini.jump',
+    'nvim-mini/mini.jump',
     event = "VeryLazy",
     opts = {}
   },

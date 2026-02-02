@@ -23,3 +23,5 @@ COMMIT_EDITMSG
 FETCH_HEAD
 
 repomix-output.xml
+.pnpm-store
+openspec

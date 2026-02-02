@@ -60,9 +60,9 @@ local function s(group, styles)
 end
 
 -- Editor UI and Global Highlights
-s('Normal',       { fg = p.fg, bg = p.bg })
-s('NormalNC',     { fg = p.fg, bg = p.subtle_bg })
-s('NormalFloat',  { fg = p.fg, bg = p.float_bg })
+s('Normal',       { fg = p.fg, bg = "None" })
+s('NormalNC',     { fg = p.fg, bg = "none" })
+s('NormalFloat',  { fg = p.fg, bg = "none"})
 s('FloatBorder',  { fg = p.border, bg = p.float_bg })
 s('FloatTitle',   { fg = p.blue_fg, bg = p.float_bg, bold = true })
 s('Cursor',       { bg = p.active })
@@ -75,21 +75,21 @@ s('IncSearch',    { fg = p.fg, bg = p.orange })
 s('MatchParen',   { fg = p.active, underline = true })
 s('Error',        { fg = git.delete, bg = p.red })
 s('SpellBad',     { undercurl = true, sp = '#F00000' })
-s('LineNr',       { fg = p.faint_fg, bg = p.bg })
+s('LineNr',       { fg = p.faint_fg, bg = "none" })
 s('CursorLineNr', { fg = p.blue_fg, bg = p.line_hl_bg, bold = true })
-s('SignColumn',   { fg = p.faint_fg, bg = p.bg })
-s('FoldColumn',   { fg = p.faint_fg, bg = p.bg })
+s('SignColumn',   { fg = p.faint_fg, bg = "none" })
+s('FoldColumn',   { fg = p.faint_fg, bg = "none" })
 s('EndOfBuffer',  { fg = p.inactive })
 s('ColorColumn',  { bg = p.line_hl_bg })
 s('Conceal',      { fg = p.faint_fg })
 s('NonText',      { fg = '#BBBBBB' })
 s('SpecialKey',   { fg = '#BBBBBB' })
 s('Folded',       { fg = p.faint_fg, bg = p.blue })
-s('VertSplit',    { fg = p.border, bg = p.bg })
-s('WinSeparator', { fg = p.border, bg = p.bg })
+s('VertSplit',    { fg = p.bg, bg = "none" })
+s('WinSeparator', { fg = p.bg, bg = "none" })
 s('StatusLine',   { fg = p.fg, bg = p.blue })
 s('StatusLineNC', { fg = p.faint_fg, bg = '#EFEFEF' })
-s('WinBar',       { fg = p.blue_fg, bg = p.bg })
+s('WinBar',       { fg = p.blue_fg, bg = "none" })
 s('WinBarNC',     { fg = p.faint_fg, bg = p.subtle_bg })
 s('NormalSB',     { fg = p.fg, bg = p.subtle_bg })
 s('QuickFixLine', { bg = p.selection })
@@ -163,8 +163,8 @@ s('@type',              { link = 'Normal' })
 s('@constant',          { fg = p.magenta_fg, bg = p.magenta }) -- Constants → purple
 s('@constant.builtin',  { fg = p.magenta_fg, bg = p.magenta }) -- Built-in constants → purple
 
-s('@markup.raw.markdown_inline',  { fg = p.fg, bg = p.bg, italic = true }) -- Raw inline markdown
-s('@markup.raw.block.markdown',   { fg = p.fg, bg = p.bg, italic = true }) -- Raw block markdown
+s('@markup.raw.markdown_inline',  { fg = p.fg, bg = "none", italic = true }) -- Raw inline markdown
+s('@markup.raw.block.markdown',   { fg = p.fg, bg = "none", italic = true }) -- Raw block markdown
 
 -- Diagnostics
 s('DiagnosticError',        { fg = diag.error.fg, bg = diag.error.bg })
@@ -179,10 +179,10 @@ s('DiagnosticUnderlineError',   { undercurl = true, sp = diag.error.sp })
 s('DiagnosticUnderlineWarn',    { undercurl = true, sp = diag.warn.sp })
 s('DiagnosticUnderlineInfo',    { undercurl = true, sp = diag.info.sp })
 s('DiagnosticUnderlineHint',    { undercurl = true, sp = diag.hint.sp })
-s('DiagnosticSignError',        { fg = diag.error.fg, bg = p.bg })
-s('DiagnosticSignWarn',         { fg = diag.warn.fg, bg = p.bg })
-s('DiagnosticSignInfo',         { fg = diag.info.fg, bg = p.bg })
-s('DiagnosticSignHint',         { fg = diag.hint.fg, bg = p.bg })
+s('DiagnosticSignError',        { fg = diag.error.fg, bg = "none" })
+s('DiagnosticSignWarn',         { fg = diag.warn.fg, bg = "none" })
+s('DiagnosticSignInfo',         { fg = diag.info.fg, bg = "none" })
+s('DiagnosticSignHint',         { fg = diag.hint.fg, bg = "none" })
 s('DiagnosticFloatingError',    { link = 'DiagnosticError' })
 s('DiagnosticFloatingWarn',     { link = 'DiagnosticWarn' })
 s('DiagnosticFloatingInfo',     { link = 'DiagnosticInfo' })
@@ -213,9 +213,9 @@ s('FzfLuaHelpNormal',        { link = 'NormalFloat' })
 s('FzfLuaHelpBorder',        { link = 'FloatBorder' })
 
 -- Plugin: mini.nvim collection
-s('MiniDiffSignAdd',       { fg = git.add, bg = p.bg })
-s('MiniDiffSignChange',    { fg = git.change, bg = p.bg })
-s('MiniDiffSignDelete',    { fg = git.delete, bg = p.bg })
+s('MiniDiffSignAdd',       { fg = git.add, bg = "none" })
+s('MiniDiffSignChange',    { fg = git.change, bg = "none" })
+s('MiniDiffSignDelete',    { fg = git.delete, bg = "none" })
 s('MiniDiffOverAdd',       { fg = git.add, bg = p.dark_green })
 s('MiniDiffOverContext',   { link = 'DiffChange' })
 s('MiniDiffOverChange',    { fg = git.change, bg = p.yellow })
@@ -248,3 +248,23 @@ s('MiniStatuslineModeVisual',  { fg = p.bg, bg = p.orange, bold = true })
 s('MiniStatuslineModeReplace', { fg = p.bg, bg = git.delete, bold = true })
 s('MiniStatuslineModeCommand', { fg = p.bg, bg = p.magenta_fg, bold = true })
 s('MiniStatuslineModeOther',   { fg = p.bg, bg = p.yellow_fg, bold = true })
+
+
+-- Define custom highlight groups for Git conflict markers
+vim.api.nvim_set_hl(0, "GitConflictMarkerBegin", { fg = "#ff0000", bg = "#3a3a3a", bold = true })
+vim.api.nvim_set_hl(0, "GitConflictMarkerOurs", { fg = "#00ff00", bg = "#3a3a3a", bold = true })
+vim.api.nvim_set_hl(0, "GitConflictMarkerTheirs", { fg = "#0000ff", bg = "#3a3a3a", bold = true })
+
+-- Define syntax matches for conflict markers using vim.cmd
+vim.cmd([[
+  autocmd BufReadPost,FileType * syntax match GitConflictMarkerBegin /^<<<<<<< .*/
+  autocmd BufReadPost,FileType * syntax match GitConflictMarkerOurs /^=======/
+  autocmd BufReadPost,FileType * syntax match GitConflictMarkerTheirs /^>>>>>>> .*/
+]])
+
+-- Link highlight groups to the above matches
+vim.cmd([[
+  autocmd BufReadPost,FileType * highlight link GitConflictMarkerBegin GitConflictMarkerBegin
+  autocmd BufReadPost,FileType * highlight link GitConflictMarkerOurs GitConflictMarkerOurs
+  autocmd BufReadPost,FileType * highlight link GitConflictMarkerTheirs GitConflictMarkerTheirs
+]])

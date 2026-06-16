@@ -1,7 +1,7 @@
 [user]
   email = bjaskulski@protonmail.com
   name = Bart Jaskulski
-	signingkey = /home/bjaskulski/.ssh/id_rsa.pub
+	signingkey = ~/.ssh/id_rsa.pub
 [core]
   excludesFile = ~/.gitignore
   autocrlf = input

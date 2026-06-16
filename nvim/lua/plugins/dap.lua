@@ -38,7 +38,7 @@ return {
                 ['/var/www/html'] = "/home/bjaskulski/Templates/WordPress",
                 ['/var/www/html/wp-content/plugins/woocommerce'] = "/home/bjaskulski/Plugins/woocommerce",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions'] =
-                "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions",
+                "/home/bjaskulski/TestSites/fsb/wp-content/plugins/flexible-subscriptions",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-emails'] =
                 "/home/bjaskulski/Repos/gitlab.wpdesk.dev/flexible-subscriptions-emails",
                 ['/var/www/html/wp-content/plugins/flexible-subscriptions-recurring-shipping'] =

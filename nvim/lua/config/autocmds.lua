@@ -37,6 +37,11 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { 'php', 'javascript', 'typescript', 'tsx', 'jsx', 'css', 'scss', 'less', 'go', 'lua', 'rust', 'python', 'java', 'c', 'cpp', 'vue', 'svelte', 'html', 'json', 'yaml', 'toml', 'markdown' },
+  callback = function() vim.treesitter.start() end,
+})
+
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("wrap_spell"),

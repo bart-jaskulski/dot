@@ -25,3 +25,5 @@ FETCH_HEAD
 repomix-output.xml
 .pnpm-store
 openspec
+.DS_STORE
+.antigravitycli

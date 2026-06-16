@@ -197,6 +197,23 @@ s('LspCodeLensSeparator',        { fg = p.inactive })
 s('LspSignatureActiveParameter', { fg = p.blue_fg, bg = p.blue, bold = true })
 s('LspInlayHint',                { fg = p.faint_fg, bg = p.subtle_bg, italic = true })
 
+-- Completion (blink.cmp uses cmp highlight groups)
+s('CmpItemAbbr',           { fg = p.fg })
+s('CmpItemAbbrDeprecated', { fg = p.faint_fg, strikethrough = true })
+s('CmpItemAbbrMatch',      { fg = p.blue_fg, bold = true })
+s('CmpItemAbbrMatchFuzzy', { fg = p.blue_fg, bold = true })
+s('CmpItemMenu',           { fg = p.faint_fg })
+s('CmpItemKind',           { fg = p.magenta_fg })
+s('CmpItemKindFunction',   { fg = p.blue_fg })
+s('CmpItemKindMethod',     { fg = p.blue_fg })
+s('CmpItemKindVariable',   { fg = p.fg })
+s('CmpItemKindKeyword',    { fg = p.yellow_fg })
+s('CmpItemKindSnippet',    { fg = p.green_fg })
+
+-- Copilot
+s('CopilotSuggestion', { fg = p.faint_fg, italic = true })
+s('CopilotAnnotation', { fg = p.blue_fg })
+
 -- Plugin: fzf-lua
 s('FzfLuaNormal',            { link = 'NormalFloat' })
 s('FzfLuaBorder',            { link = 'FloatBorder' })
@@ -248,6 +265,20 @@ s('MiniStatuslineModeVisual',  { fg = p.bg, bg = p.orange, bold = true })
 s('MiniStatuslineModeReplace', { fg = p.bg, bg = git.delete, bold = true })
 s('MiniStatuslineModeCommand', { fg = p.bg, bg = p.magenta_fg, bold = true })
 s('MiniStatuslineModeOther',   { fg = p.bg, bg = p.yellow_fg, bold = true })
+
+-- Plugin: nvim-dap
+s('DapBreakpoint',         { fg = git.delete, bg = p.red })
+s('DapBreakpointRejected', { fg = git.delete, bg = p.red })
+s('DapBreakpointCondition',{ fg = p.yellow_fg, bg = p.yellow })
+s('DapLogPoint',           { fg = p.blue_fg, bg = p.blue })
+s('DapStopped',            { fg = p.green_fg, bg = p.green })
+s('DapStoppedLine',        { bg = p.green })
+s('NvimDapVirtualText',    { fg = p.blue_fg, bg = p.blue })
+
+-- Plugin: nvim-treesitter-context
+s('TreesitterContext',         { bg = p.subtle_bg })
+s('TreesitterContextLineNumber',{ fg = p.faint_fg, bg = p.subtle_bg })
+s('TreesitterContextBottom',   { underline = true, sp = p.inactive })
 
 
 -- Define custom highlight groups for Git conflict markers

@@ -141,4 +141,12 @@ return {
       end },
     }
   },
+  -- Kept only while php-debug-adapter is installed in Mason's package directory.
+  {
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+    build = ":MasonUpdate",
+    opts = true,
+  },
 }

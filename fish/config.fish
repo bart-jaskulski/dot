@@ -6,7 +6,7 @@ set -gx LSCOLORS ExFxBxDxCxegedabagacad
 #set -gx TERM xterm-256color
 set -gx EDITOR nvim
 set -gx VISUAL nvim
-set -gx LESS "-FXR"
+set -gx LESS "-FXR --mouse"
 set -gx LESS_TERMCAP_mb (printf '\e[1;32m')
 set -gx LESS_TERMCAP_md (printf '\e[1;32m')
 set -gx LESS_TERMCAP_me (printf '\e[0m')

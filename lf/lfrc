@@ -79,6 +79,7 @@ map mf push :mkfile<space>
 
 map gh cd ~
 
+map i $bat --style=plain $f
 # map <c-t> &tmux neww 'lf $PWD'
 
 map dd $rm -r "$fx"

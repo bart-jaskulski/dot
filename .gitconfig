@@ -5,7 +5,7 @@
 [core]
   excludesFile = ~/.gitignore
   autocrlf = input
-  pager = delta
+  pager = ~/Scripts/delta-pager
   untrackedCache = true
   fsmonitor = true
 [interactive]
@@ -17,7 +17,7 @@
 [diff]
   tool = vimdiff
   algorithm = histogram
-  colorMoved = default
+  colorMoved = false
 [difftool "vimdiff"]
   cmd = vim -d -o \"$LOCAL\" \"$REMOTE\"
 [difftool]
@@ -31,8 +31,8 @@
 [color "diff"]
   meta = yellow bold
   frag = magenta bold # line info
-  old = red # deletions
-  new = green # additions
+  old = "#70685F" # deletions
+  new = "#005A9C" # additions
 [color "status"]
   added = yellow
   changed = green
@@ -90,7 +90,20 @@
   navigate = true
   light = true
   line-numbers = true
+  syntax-theme = Alabaster
+  minus-style = syntax "#F0EDE8"
+  minus-emph-style = syntax "#DDD6CC"
+  plus-style = syntax "#DBF1FF"
+  plus-emph-style = syntax "#B4D8FD"
+  line-numbers-minus-style = "#70685F"
+  line-numbers-plus-style = "#005A9C"
+  keep-plus-minus-markers = true
 [branch]
 	sort = -committerdate
 [gpg]
 	format = ssh
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f

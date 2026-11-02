@@ -1,4 +1,4 @@
-set -U fish_greeting
+set -g fish_greeting
 
 set -gx GPG_TTY (tty)
 set -gx CLICOLOR 1
@@ -6,7 +6,6 @@ set -gx LSCOLORS ExFxBxDxCxegedabagacad
 #set -gx TERM xterm-256color
 set -gx EDITOR nvim
 set -gx VISUAL nvim
-set -gx BROWSER lynx
 set -gx LESS "-FXR"
 set -gx LESS_TERMCAP_mb (printf '\e[1;32m')
 set -gx LESS_TERMCAP_md (printf '\e[1;32m')
@@ -17,11 +16,7 @@ set -gx LESS_TERMCAP_ue (printf '\e[0m')
 set -gx LESS_TERMCAP_us (printf '\e[1;4;31m')
 set -gx GOBIN "$HOME/.local/bin"
 
-set -gx NT_ROOT "/home/bjaskulski/Repos/github.com/bart-jaskulski/me/notes"
-
-set -gx ATAC_KEY_BINDINGS "/home/bjaskulski/.config/atac/keybinds.toml"
-set -gx ATAC_THEME "/home/bjaskulski/.config/atac/theme.toml"
-set -gx BAT_THEME "ansi"
+set -gx BAT_THEME "Alabaster"
 set -gx FZF_DEFAULT_OPTS "--height 40% --layout=reverse"
 set -gx GITLAB_HOST 'https://gitlab.wpdesk.dev'
 set -gx GLAMOUR_STYLE 'light'

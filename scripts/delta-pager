@@ -1,0 +1,9 @@
+#!/bin/sh
+
+width=$(tput cols 2>/dev/null) || width=80
+
+if [ "$width" -ge 120 ]; then
+  exec delta --side-by-side "$@"
+fi
+
+exec delta "$@"
